@@ -1,0 +1,17 @@
+[
+{
+  "modid": "StructuredCrafting",
+  "name": "Structured Crafting",
+  "description": "Craft stuff in your world, automatically.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "logoFile": "assets/integrateddynamics/textures/logo.png",
+  "url": "TODO",
+  "updateUrl": "TODO",
+  "authorList": [ "rubensworks (aka kroeserr)" ],
+  "credits": "kroeserr",
+  "parent": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

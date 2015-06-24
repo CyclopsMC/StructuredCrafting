@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "normal":    { "model": "structuredcrafting:structured_crafter" },
+    "inventory": { "model": "structuredcrafting:structured_crafter" }
+  }
+}

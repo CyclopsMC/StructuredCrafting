@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "particle": "structuredcrafting:blocks/structuredCrafter_front",
+        "down": "blocks/cobblestone",
+        "up": "structuredcrafting:blocks/structuredCrafter_top",
+        "north": "structuredcrafting:blocks/structuredCrafter_front",
+        "east": "structuredcrafting:blocks/structuredCrafter_side",
+        "south": "structuredcrafting:blocks/structuredCrafter_side",
+        "west": "structuredcrafting:blocks/structuredCrafter_front"
+    }
+}
