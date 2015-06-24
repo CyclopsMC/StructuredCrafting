@@ -7,6 +7,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import org.cyclops.cyclopscore.config.configurable.ConfigurableBlock;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
+import org.cyclops.structurecrafting.craft.WorldCraftingMatrix;
 
 /**
  * This block will detect neighbour block updates and will try to craft a new block/item from them.
@@ -36,8 +37,13 @@ public class BlockStructuredCrafter extends ConfigurableBlock {
     }
 
     @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-        System.out.println("changed"); // TODO
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+        if(!world.isBlockPowered(pos)) {
+            WorldCraftingMatrix[] matrices = WorldCraftingMatrix.deriveMatrices(world, pos);
+            for (WorldCraftingMatrix matrix : matrices) {
+                if (matrix.craft()) break;
+            }
+        }
     }
 
 }
