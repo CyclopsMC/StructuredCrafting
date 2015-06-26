@@ -13,6 +13,10 @@ import org.cyclops.cyclopscore.init.ModBase;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.structurecrafting.block.BlockStructuredCrafter;
 import org.cyclops.structurecrafting.block.BlockStructuredCrafterConfig;
+import org.cyclops.structurecrafting.craft.provider.IItemStackProviderRegistry;
+import org.cyclops.structurecrafting.craft.provider.InventoryItemStackProvider;
+import org.cyclops.structurecrafting.craft.provider.ItemStackProviderRegistry;
+import org.cyclops.structurecrafting.craft.provider.WorldItemStackProvider;
 
 /**
  * The main mod class of StructuredCrafting.
@@ -40,6 +44,8 @@ public class StructuredCrafting extends ModBase {
     @Mod.EventHandler
     @Override
     public final void preInit(FMLPreInitializationEvent event) {
+        getRegistryManager().addRegistry(IItemStackProviderRegistry.class, new ItemStackProviderRegistry());
+
         super.preInit(event);
     }
 
@@ -47,6 +53,10 @@ public class StructuredCrafting extends ModBase {
     @Override
     public final void init(FMLInitializationEvent event) {
         super.init(event);
+
+        IItemStackProviderRegistry registry = getRegistryManager().getRegistry(IItemStackProviderRegistry.class);
+        registry.registerProvider(new InventoryItemStackProvider());
+        registry.registerProvider(new WorldItemStackProvider());
     }
 
     @Mod.EventHandler

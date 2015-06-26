@@ -38,7 +38,7 @@ public class BlockStructuredCrafter extends ConfigurableBlock {
 
     @Override
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-        if(!world.isBlockPowered(pos)) {
+        if(!world.isRemote && !world.isBlockPowered(pos)) {
             WorldCraftingMatrix[] matrices = WorldCraftingMatrix.deriveMatrices(world, pos);
             for (WorldCraftingMatrix matrix : matrices) {
                 if (matrix.craft()) break;
