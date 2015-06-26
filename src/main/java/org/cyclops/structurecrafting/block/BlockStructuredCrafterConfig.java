@@ -1,13 +1,13 @@
 package org.cyclops.structurecrafting.block;
 
-import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockContainerConfig;
 import org.cyclops.structurecrafting.StructuredCrafting;
 
 /**
  * Config for {@link BlockStructuredCrafter}.
  * @author rubensworks
  */
-public class BlockStructuredCrafterConfig extends BlockConfig {
+public class BlockStructuredCrafterConfig extends BlockContainerConfig {
 
     /**
      * The unique instance.

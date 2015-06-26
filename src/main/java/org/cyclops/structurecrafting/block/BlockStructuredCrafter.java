@@ -6,14 +6,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import org.cyclops.cyclopscore.config.configurable.ConfigurableBlock;
+import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
 import org.cyclops.structurecrafting.craft.WorldCraftingMatrix;
+import org.cyclops.structurecrafting.tileentity.TileStructuredCrafter;
 
 /**
  * This block will detect neighbour block updates and will try to craft a new block/item from them.
  * @author rubensworks
  */
-public class BlockStructuredCrafter extends ConfigurableBlock {
+public class BlockStructuredCrafter extends ConfigurableBlockContainer {
 
     private static BlockStructuredCrafter _instance = null;
 
@@ -30,20 +32,10 @@ public class BlockStructuredCrafter extends ConfigurableBlock {
      * @param eConfig Config for this block.
      */
     public BlockStructuredCrafter(ExtendedConfig eConfig) {
-        super(eConfig, Material.iron);
+        super(eConfig, Material.ground, TileStructuredCrafter.class);
 
-        setHardness(3.0F);
-        setStepSound(soundTypeMetal);
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-        if(!world.isRemote && !world.isBlockPowered(pos)) {
-            WorldCraftingMatrix[] matrices = WorldCraftingMatrix.deriveMatrices(world, pos);
-            for (WorldCraftingMatrix matrix : matrices) {
-                if (matrix.craft()) break;
-            }
-        }
+        setHardness(2.0F);
+        setStepSound(soundTypeStone);
     }
 
 }
