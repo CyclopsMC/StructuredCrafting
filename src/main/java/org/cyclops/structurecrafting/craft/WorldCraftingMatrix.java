@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.structurecrafting.StructuredCrafting;
+import org.cyclops.structurecrafting.block.BlockStructuredCrafter;
 import org.cyclops.structurecrafting.craft.provider.IItemStackProvider;
 import org.cyclops.structurecrafting.craft.provider.IItemStackProviderRegistry;
 
@@ -40,7 +41,7 @@ public class WorldCraftingMatrix {
 
     protected BlockPos addInAxis(BlockPos pos, EnumFacing.Axis axis, int i, int j) {
         if(axis == EnumFacing.Axis.X) {
-            return pos.add(0, i, j);
+            return pos.add(0, j, i);
         } else if(axis == EnumFacing.Axis.Y) {
             return pos.add(i, 0, j);
         } else if(axis == EnumFacing.Axis.Z) {
@@ -86,7 +87,6 @@ public class WorldCraftingMatrix {
 
         BlockPos[] positions = new BlockPos[9];
         IItemStackProvider[] providers = new IItemStackProvider[9];
-
         // Set crafting grid
         for(int i = -1; i < 2; i++) {
             for(int j = -1; j < 2; j++) {
@@ -123,14 +123,10 @@ public class WorldCraftingMatrix {
         return false;
     }
 
-    public static WorldCraftingMatrix[] deriveMatrices(World world, BlockPos centerPos) {
-        final WorldCraftingMatrix[] matrices = new WorldCraftingMatrix[6]; // Test for all faces of the center position.
-        for(int i = 0; i < EnumFacing.values().length; i++) {
-            EnumFacing side = EnumFacing.values()[i];
-            matrices[i] = new WorldCraftingMatrix(world, centerPos.offset(side), side.getAxis(),
-                    centerPos.offset(side.getOpposite()), side.getOpposite());
-        }
-        return matrices;
+    public static WorldCraftingMatrix deriveMatrix(World world, BlockPos centerPos) {
+        EnumFacing side = ((EnumFacing) world.getBlockState(centerPos).getValue(BlockStructuredCrafter.FACING)).getOpposite();
+        return new WorldCraftingMatrix(world, centerPos.offset(side), side.getAxis(),
+                centerPos.offset(side.getOpposite()), side.getOpposite());
     }
 
 }

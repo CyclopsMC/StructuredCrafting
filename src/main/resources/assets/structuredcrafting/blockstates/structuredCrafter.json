@@ -1,6 +1,11 @@
 {
   "variants": {
-    "normal":    { "model": "structuredcrafting:structured_crafter" },
-    "inventory": { "model": "structuredcrafting:structured_crafter" }
+    "facing=south": { "model": "structuredcrafting:structured_crafter", "x": 90 },
+    "facing=west" : { "model": "structuredcrafting:structured_crafter", "x": 90, "y": 90 },
+    "facing=north": { "model": "structuredcrafting:structured_crafter", "x": 90, "y": 180 },
+    "facing=east" : { "model": "structuredcrafting:structured_crafter", "x": 90, "y": 270 },
+    "facing=up" :   { "model": "structuredcrafting:structured_crafter", "x": 180 },
+    "facing=down" : { "model": "structuredcrafting:structured_crafter" },
+    "inventory"   : { "model": "structuredcrafting:structured_crafter" }
   }
 }

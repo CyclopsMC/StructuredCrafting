@@ -1,14 +1,18 @@
 package org.cyclops.structurecrafting.block;
 
-import net.minecraft.block.Block;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import org.cyclops.cyclopscore.config.configurable.ConfigurableBlock;
+import org.cyclops.cyclopscore.block.property.BlockProperty;
 import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
-import org.cyclops.structurecrafting.craft.WorldCraftingMatrix;
 import org.cyclops.structurecrafting.tileentity.TileStructuredCrafter;
 
 /**
@@ -16,6 +20,9 @@ import org.cyclops.structurecrafting.tileentity.TileStructuredCrafter;
  * @author rubensworks
  */
 public class BlockStructuredCrafter extends ConfigurableBlockContainer {
+
+    @BlockProperty
+    public static final PropertyDirection FACING = PropertyDirection.create("facing", Lists.newArrayList(EnumFacing.VALUES));
 
     private static BlockStructuredCrafter _instance = null;
 
@@ -36,6 +43,12 @@ public class BlockStructuredCrafter extends ConfigurableBlockContainer {
 
         setHardness(2.0F);
         setStepSound(soundTypeStone);
+    }
+
+    @Override
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+                                     int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(FACING, facing.getOpposite());
     }
 
 }

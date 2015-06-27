@@ -21,10 +21,8 @@ public class TileStructuredCrafter extends TickingCyclopsTileEntity {
     protected void updateTileEntity() {
         tickOffset = (tickOffset + 1) % SPEED;
         if(!worldObj.isRemote && tickOffset == 0 && worldObj.isBlockPowered(getPos())) {
-            WorldCraftingMatrix[] matrices = WorldCraftingMatrix.deriveMatrices(worldObj, pos);
-            for (WorldCraftingMatrix matrix : matrices) {
-                if (matrix.craft()) break;
-            }
+            WorldCraftingMatrix matrix = WorldCraftingMatrix.deriveMatrix(worldObj, pos);
+            matrix.craft();
         }
     }
 
