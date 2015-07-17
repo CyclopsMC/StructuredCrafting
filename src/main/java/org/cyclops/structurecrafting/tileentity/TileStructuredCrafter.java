@@ -1,13 +1,13 @@
 package org.cyclops.structurecrafting.tileentity;
 
-import org.cyclops.cyclopscore.tileentity.TickingCyclopsTileEntity;
+import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
 import org.cyclops.structurecrafting.craft.WorldCraftingMatrix;
 
 /**
  * A ticking tile entity for the structured crafter.
  * @author rubensworks
  */
-public class TileStructuredCrafter extends TickingCyclopsTileEntity {
+public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsTileEntity.ITickingTile {
 
     private static final int SPEED = 20;
 
