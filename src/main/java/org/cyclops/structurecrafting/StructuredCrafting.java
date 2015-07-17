@@ -10,6 +10,7 @@ import org.cyclops.cyclopscore.config.extendedconfig.BlockItemConfigReference;
 import org.cyclops.cyclopscore.config.extendedconfig.ItemConfigReference;
 import org.cyclops.cyclopscore.init.ItemCreativeTab;
 import org.cyclops.cyclopscore.init.ModBase;
+import org.cyclops.cyclopscore.init.RecipeHandler;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.structurecrafting.block.BlockStructuredCrafter;
 import org.cyclops.structurecrafting.block.BlockStructuredCrafterConfig;
@@ -39,6 +40,11 @@ public class StructuredCrafting extends ModBase {
 
     public StructuredCrafting() {
         super(Reference.MOD_ID, Reference.MOD_NAME);
+    }
+
+    @Override
+    protected RecipeHandler constructRecipeHandler() {
+        return null; // TODO
     }
 
     @Mod.EventHandler
