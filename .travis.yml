@@ -1,0 +1,35 @@
+language: java
+jdk: openjdk7
+notifications:
+  email: false
+  slack:
+    secure: mQIrH19MBb+r0QKFp1/1pRV4XCzJxZXqkUvaQzhQDe2Mf6zSGGdJlargTIPr6Wz4YvfRymyl13WZXdNavCCWyxUuWEksc1ehvVMU2sMmOWF/fPyntoMvARDozy6woHVICqCiDTtSaQLe5KDnkSgnc1Aebc0DVHBLnXMBmVL3k98vsBsbL4jgtDSVIyRsLSbfbKbZIdcri1kClydW2VjbMOOItJk4g+JjFnc1x6qLRknzmiorwXpYBp6fWab16xMu6NaUnciu78Uo1ycv1UUjMKVfDDT4732Nkmyi1wMS6UQ4k4XElpbuNiy/jdwTXxUuHqg4KEzoNSOr5t5k7yuVWlXCg2P7AqxBPWHxKCS0mlYO4xbOqIp5b91GJiNnokq7CiC/55m1oalWkwpCOCQ7Zli4rDxt0WB9QeKkgRalbxcURBRlakMrLo9QR5LwZAgiDQ1FzFjDqYqYXszppLJjNPyQwJvNbkT0Z19Bk1iu4obN2psEBTkggKrWg1kTRsi0ZaGF94apdBG9JFVtXL1RVz7x/6S4jnZoakAu1NXgafVe56X2ZoFEd6pUjt9NO55C4Cg/BTtJiSQwFJARIGj2MbQsPx7I29c++A0BQWT7mOwFIZ18ppaJGXjpa51Bv0XiZ6n6kanW9dPhYef2oWNUEjKebenOWD/eQK8bYhdNMCw=
+env:
+  global:
+  - TERM=dumb
+
+install: ./gradlew setupCIWorkspace -S
+script: ./gradlew build -S
+
+deploy:
+- provider: script
+  script: ./gradlew curse -S
+  on:
+    all_branches: true
+    repo: CyclopsMC/StructuredCrafting
+    condition: $TRAVIS_BRANCH =~ ^(master|release).*$
+    tags: true
+- provider: releases
+  api_key:
+    secure: KYHDLGt9Udzjx6QS+orXNAVOj/Bo1qoWAK/cX7qUtzRWJ4ZASwfiRvnv80qaMQYLzFYE7qy4QPQ0j2BPUzxyyvYXwddoHbHlR8VPKCrBDeJV/AVaZzJfMx9bntNq9/X4DxF7o8kbLK6T9wkECNgZBi/cu57cvFkQWLbSNV5OQj/z7mURjZ7zlP7wI9tnQEwopvFWWlbh10VoVhN5uopMY+iVST7763EtZD3uG0LKLTrbJo4bM+DhxusfSVGrWMs586KM+xGLjOGiWgaoGxBV0T1f613dP9b3Ge38GJ6e0lgqgMQGHayTXrc0UhJ4TnNL8IhkM1No//bDOcQq8zb1f/FYspZuBiJqp7PbMyYSP81Zz+GHs0DPkcgrL2hSCFSVE2ACDU6lNwEO1WI66RlcYy1b2J3xZ7SJph//2hy0PKo2/R32GUfmbVxaSjGzmAy9xp+h6FYFlWxU9CXudV8vJTTwzaVpZQO3yoRyTjtb2DJAM9xoBeZjHSkK15CKky6minPrdgxWs3g+5lVNYFIJXPYX6G4dZdyRGqu7TV8L3tBm1AA9jM9LRRDhFQQu0lvnAj7eULZWM2WbLA/sEAwC9mgL1+BSpwSctMx1SagNIR+djH3CbxhxkyC1ST7nzIJ5H622+DJwx8pFgxF6aZ8Jl/e6OY/cXKUhhMUwKv6VOZQ=
+  on:
+    all_branches: true
+    repo: CyclopsMC/StructuredCrafting
+    condition: $TRAVIS_BRANCH =~ ^(master|release).*$
+    tags: true
+- provider: script
+  script: ./gradlew uploadArchives -S
+  on:
+    all_branches: true
+    repo: CyclopsMC/StructuredCrafting
+    condition: $TRAVIS_BRANCH =~ ^(master|release).*$
