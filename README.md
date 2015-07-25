@@ -2,6 +2,11 @@
 
 [![Build Status](https://travis-ci.org/CyclopsMC/StructuredCrafting.svg?branch=master-1.8)](https://travis-ci.org/CyclopsMC/StructuredCrafting)
 
+All stable releases (including deobfuscated builds) can be found on [CurseForge](http://minecraft.curseforge.com/mc-mods/233151-structured-crafting/files).
+
+More gameplay information can be found on [CurseForge](http://minecraft.curseforge.com/mc-mods/233151-structured-crafting).
+
+
 ### Contributing
 * Before submitting a pull request containing a new feature, please discuss this first with one of the lead developers.
 * When fixing an accepted bug, make sure to declare this in the issue so that no duplicate fixes exist.
