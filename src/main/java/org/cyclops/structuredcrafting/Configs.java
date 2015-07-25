@@ -1,7 +1,7 @@
-package org.cyclops.structurecrafting;
+package org.cyclops.structuredcrafting;
 
 import org.cyclops.cyclopscore.config.ConfigHandler;
-import org.cyclops.structurecrafting.block.BlockStructuredCrafterConfig;
+import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
 
 /**
  * This class holds a set of all the configs that need to be registered.

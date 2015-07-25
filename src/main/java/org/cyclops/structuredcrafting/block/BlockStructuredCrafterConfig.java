@@ -1,7 +1,7 @@
-package org.cyclops.structurecrafting.block;
+package org.cyclops.structuredcrafting.block;
 
 import org.cyclops.cyclopscore.config.extendedconfig.BlockContainerConfig;
-import org.cyclops.structurecrafting.StructuredCrafting;
+import org.cyclops.structuredcrafting.StructuredCrafting;
 
 /**
  * Config for {@link BlockStructuredCrafter}.

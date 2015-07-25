@@ -1,7 +1,8 @@
-package org.cyclops.structurecrafting.tileentity;
+package org.cyclops.structuredcrafting.tileentity;
 
+import lombok.experimental.Delegate;
 import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
-import org.cyclops.structurecrafting.craft.WorldCraftingMatrix;
+import org.cyclops.structuredcrafting.craft.WorldCraftingMatrix;
 
 /**
  * A ticking tile entity for the structured crafter.
@@ -10,6 +11,9 @@ import org.cyclops.structurecrafting.craft.WorldCraftingMatrix;
 public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsTileEntity.ITickingTile {
 
     private static final int SPEED = 20;
+
+    @Delegate
+    private final ITickingTile tickingTileComponent = new TickingTileComponent(this);
 
     private int tickOffset;
 

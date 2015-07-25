@@ -1,4 +1,4 @@
-package org.cyclops.structurecrafting.craft.provider;
+package org.cyclops.structuredcrafting.craft.provider;
 
 import com.google.common.collect.Lists;
 

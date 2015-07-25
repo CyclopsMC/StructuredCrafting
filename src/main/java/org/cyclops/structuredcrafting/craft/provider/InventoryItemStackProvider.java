@@ -1,4 +1,4 @@
-package org.cyclops.structurecrafting.craft.provider;
+package org.cyclops.structuredcrafting.craft.provider;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

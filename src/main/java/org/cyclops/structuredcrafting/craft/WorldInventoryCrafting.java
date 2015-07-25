@@ -1,4 +1,4 @@
-package org.cyclops.structurecrafting.craft;
+package org.cyclops.structuredcrafting.craft;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

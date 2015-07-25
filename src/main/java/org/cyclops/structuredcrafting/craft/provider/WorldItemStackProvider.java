@@ -1,7 +1,6 @@
-package org.cyclops.structurecrafting.craft.provider;
+package org.cyclops.structuredcrafting.craft.provider;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -31,9 +30,9 @@ public class WorldItemStackProvider implements IItemStackProvider {
 
         ItemStack itemStack = null;
         if(blockState != null) {
-            Item item = blockState.getBlock().getItem(world, pos);
+            Item item = Item.getItemFromBlock(blockState.getBlock());
             if(item != null) {
-                itemStack = new ItemStack(item, blockState.getBlock().getDamageValue(world, pos));
+                itemStack = new ItemStack(item, 1, blockState.getBlock().getDamageValue(world, pos));
             }
         }
         return itemStack;
@@ -53,7 +52,9 @@ public class WorldItemStackProvider implements IItemStackProvider {
     public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack) {
         if(itemStack.getItem() instanceof ItemBlock) {
             world.setBlockState(pos, ((ItemBlock) itemStack.getItem()).getBlock().getStateFromMeta(itemStack.getItemDamage()));
-        } else {
+            itemStack.stackSize--;
+        }
+        if(itemStack.stackSize > 0) {
             ItemStackHelpers.spawnItemStack(world, pos, itemStack);
         }
         return true;

@@ -1,17 +1,16 @@
-package org.cyclops.structurecrafting.craft;
+package org.cyclops.structuredcrafting.craft;
 
 import com.google.common.collect.Lists;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
-import org.cyclops.structurecrafting.StructuredCrafting;
-import org.cyclops.structurecrafting.block.BlockStructuredCrafter;
-import org.cyclops.structurecrafting.craft.provider.IItemStackProvider;
-import org.cyclops.structurecrafting.craft.provider.IItemStackProviderRegistry;
+import org.cyclops.structuredcrafting.StructuredCrafting;
+import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
+import org.cyclops.structuredcrafting.craft.provider.IItemStackProvider;
+import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 
 import java.util.List;
 
