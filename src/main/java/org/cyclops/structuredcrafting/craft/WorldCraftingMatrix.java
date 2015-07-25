@@ -86,25 +86,35 @@ public class WorldCraftingMatrix {
 
         BlockPos[] positions = new BlockPos[9];
         IItemStackProvider[] providers = new IItemStackProvider[9];
-        // Set crafting grid
-        for(int i = -1; i < 2; i++) {
-            for(int j = -1; j < 2; j++) {
-                int arrayIndex = (j + 1) * 3 + (i + 1);
-                BlockPos pos = addInAxis(centerPos, axis, i, j);
-                Pair<ItemStack, IItemStackProvider> result = determineItemStackProviderForInput(world, pos, inputSide);
-                ItemStack itemStack = result != null ? result.getLeft() : null;
-                if(itemStack != null) {
-                    itemStack = itemStack.copy();
-                    itemStack.stackSize = 1;
+        ItemStack itemStack = null;
+        for(int k = 0; k < 2; k++) {
+            // Set crafting grid
+            if(itemStack == null) {
+                for (int i = -1; i < 2; i++) {
+                    for (int j = -1; j < 2; j++) {
+                        int arrayIndex = (j + 1) * 3 + (i + 1);
+                        BlockPos pos = addInAxis(centerPos, axis, i, j);
+                        Pair<ItemStack, IItemStackProvider> result = determineItemStackProviderForInput(world, pos, inputSide);
+                        ItemStack itemStackInput = result != null ? result.getLeft() : null;
+                        if (itemStackInput != null) {
+                            itemStackInput = itemStackInput.copy();
+                            itemStackInput.stackSize = 1;
+                        }
+                        // This makes sure we can also accept recipes which are rotated, mirroring is already supported by Vanilla.
+                        if (k == 0) {
+                            INVENTORY_CRAFTING.setItemStack(i + 1, j + 1, itemStackInput);
+                        } else {
+                            INVENTORY_CRAFTING.setItemStack(j + 1, i + 1, itemStackInput);
+                        }
+                        positions[arrayIndex] = pos;
+                        providers[arrayIndex] = result != null ? result.getRight() : null;
+                    }
                 }
-                INVENTORY_CRAFTING.setItemStack(i + 1, j + 1, itemStack);
-                positions[arrayIndex] = pos;
-                providers[arrayIndex] = result != null ? result.getRight() : null;
+                itemStack = CraftingManager.getInstance().findMatchingRecipe(INVENTORY_CRAFTING, world);
             }
         }
 
         // Determine output
-        ItemStack itemStack = CraftingManager.getInstance().findMatchingRecipe(INVENTORY_CRAFTING, world);
         if(itemStack != null && addItemStackForOutput(world, targetPos, targetSide, outputProviders, itemStack)) {
             // Handle remaining container items: place blocks and drop items
             ItemStack[] remainingStacks = CraftingManager.getInstance().func_180303_b(INVENTORY_CRAFTING, world);
