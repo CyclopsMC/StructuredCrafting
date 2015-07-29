@@ -87,7 +87,7 @@ public class WorldCraftingMatrix {
         BlockPos[] positions = new BlockPos[9];
         IItemStackProvider[] providers = new IItemStackProvider[9];
         ItemStack itemStack = null;
-        for(int k = 0; k < 2; k++) {
+        for(int k = 0; k < 3; k++) {
             // Set crafting grid
             if(itemStack == null) {
                 for (int i = -1; i < 2; i++) {
@@ -103,8 +103,10 @@ public class WorldCraftingMatrix {
                         // This makes sure we can also accept recipes which are rotated, mirroring is already supported by Vanilla.
                         if (k == 0) {
                             INVENTORY_CRAFTING.setItemStack(i + 1, j + 1, itemStackInput);
-                        } else {
+                        } else if(k == 1) {
                             INVENTORY_CRAFTING.setItemStack(j + 1, i + 1, itemStackInput);
+                        } else if(k == 2) {
+                            INVENTORY_CRAFTING.setItemStack(i + 1, 2 - (j + 1), itemStackInput);
                         }
                         positions[arrayIndex] = pos;
                         providers[arrayIndex] = result != null ? result.getRight() : null;
