@@ -5,6 +5,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -47,6 +49,14 @@ public class BlockStructuredCrafter extends ConfigurableBlockContainer {
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
                                      int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, facing.getOpposite());
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(playerIn != null && playerIn.getHeldItem() != null && playerIn.getHeldItem().getItem() == Items.stick) {
+            this.rotateBlock(worldIn, pos, side);
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
     }
 
 }
