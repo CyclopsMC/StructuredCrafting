@@ -1,0 +1,4 @@
+Changes:
+* Allow the crafter to be rotated with a stick, Closes #1
+By default also supports wrenches from other mods.
+* Add support for upside-down recipes, Closes #3
