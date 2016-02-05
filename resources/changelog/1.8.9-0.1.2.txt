@@ -1,0 +1,5 @@
+Make sure to backup your world before updating!
+Requires CyclopsCore version 0.5.0.
+
+Changes:
+* Add support for Forge's new IItemHandler to inventory tiles
