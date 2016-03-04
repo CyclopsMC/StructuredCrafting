@@ -2,11 +2,9 @@ package org.cyclops.structuredcrafting.craft.provider;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
@@ -62,11 +60,11 @@ public class InventoryItemStackProvider implements IItemStackProvider {
     }
 
     @Override
-    public void reduceItemStack(World world, BlockPos pos, EnumFacing side) {
+    public void reduceItemStack(World world, BlockPos pos, EnumFacing side, boolean simulate) {
         IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
-                if(itemHandler.extractItem(slot, 1, false) != null) {
+                if(itemHandler.extractItem(slot, 1, simulate) != null) {
                     break;
                 }
             }
@@ -78,23 +76,25 @@ public class InventoryItemStackProvider implements IItemStackProvider {
             if (newItemStack.stackSize <= 0) {
                 newItemStack = null;
             }
-            inventory.setInventorySlotContents(result.getLeft(), newItemStack);
+            if(!simulate) {
+                inventory.setInventorySlotContents(result.getLeft(), newItemStack);
+            }
         }
     }
 
     @Override
-    public boolean addItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack) {
+    public boolean addItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate) {
         IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
-                if(itemHandler.insertItem(slot, itemStack, false) == null) {
+                if(itemHandler.insertItem(slot, itemStack, simulate) == null) {
                     return true;
                 }
             }
         } else {
             IInventory inventory = TileHelpers.getSafeTile(world, pos, IInventory.class);
             for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
-                if (InventoryHelpers.addToSlot(inventory, slot, itemStack)) {
+                if (InventoryHelpers.addToSlot(inventory, slot, itemStack, simulate)) {
                     return true;
                 }
             }
@@ -103,11 +103,11 @@ public class InventoryItemStackProvider implements IItemStackProvider {
     }
 
     @Override
-    public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack) {
+    public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate) {
         IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
-                if(itemHandler.insertItem(slot, itemStack, false) == null) {
+                if(itemHandler.insertItem(slot, itemStack, simulate) == null) {
                     return true;
                 }
             }
@@ -115,7 +115,9 @@ public class InventoryItemStackProvider implements IItemStackProvider {
             IInventory inventory = TileHelpers.getSafeTile(world, pos, IInventory.class);
             Pair<Integer, ItemStack> result = getFirstItem(inventory, side);
             if (result != null) {
-                inventory.setInventorySlotContents(result.getLeft(), itemStack);
+                if(!simulate) {
+                    inventory.setInventorySlotContents(result.getLeft(), itemStack);
+                }
                 return true;
             }
         }

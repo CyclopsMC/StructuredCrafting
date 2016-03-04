@@ -39,22 +39,24 @@ public class WorldItemStackProvider implements IItemStackProvider {
     }
 
     @Override
-    public void reduceItemStack(World world, BlockPos pos, EnumFacing side) {
-        world.setBlockToAir(pos);
+    public void reduceItemStack(World world, BlockPos pos, EnumFacing side, boolean simulate) {
+        if(!simulate) {
+            world.setBlockToAir(pos);
+        }
     }
 
     @Override
-    public boolean addItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack) {
-        return setItemStack(world, pos, side, itemStack);
+    public boolean addItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate) {
+        return setItemStack(world, pos, side, itemStack, simulate);
     }
 
     @Override
-    public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack) {
-        if(itemStack.getItem() instanceof ItemBlock) {
+    public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate) {
+        if(!simulate && itemStack.getItem() instanceof ItemBlock) {
             world.setBlockState(pos, ((ItemBlock) itemStack.getItem()).getBlock().getStateFromMeta(itemStack.getItemDamage()));
             itemStack.stackSize--;
         }
-        if(itemStack.stackSize > 0) {
+        if(!simulate && itemStack.stackSize > 0) {
             ItemStackHelpers.spawnItemStack(world, pos, itemStack);
         }
         return true;

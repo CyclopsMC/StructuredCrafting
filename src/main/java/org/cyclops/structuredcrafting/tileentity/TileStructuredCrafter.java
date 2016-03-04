@@ -12,6 +12,8 @@ public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsT
 
     private static final int SPEED = 20;
 
+    protected WorldCraftingMatrix matrix = null;
+
     @Delegate
     private final ITickingTile tickingTileComponent = new TickingTileComponent(this);
 
@@ -21,12 +23,22 @@ public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsT
         tickOffset = (int) (Math.random() * (float) SPEED);
     }
 
+    public WorldCraftingMatrix getMatrix() {
+        if(matrix == null) {
+            matrix = WorldCraftingMatrix.deriveMatrix(worldObj, pos);
+        }
+        return matrix;
+    }
+
     @Override
     protected void updateTileEntity() {
         tickOffset = (tickOffset + 1) % SPEED;
-        if(!worldObj.isRemote && tickOffset == 0 && worldObj.isBlockPowered(getPos())) {
-            WorldCraftingMatrix matrix = WorldCraftingMatrix.deriveMatrix(worldObj, pos);
-            matrix.craft();
+        if(!worldObj.isRemote && tickOffset == 0) {
+            if(worldObj.isBlockPowered(getPos())) {
+                getMatrix().craft(false);
+            } else {
+                matrix = null;
+            }
         }
     }
 

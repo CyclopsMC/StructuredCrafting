@@ -43,8 +43,9 @@ public interface IItemStackProvider {
      * @param world The world.
      * @param pos The position.
      * @param side The side.
+     * @param simulate If the operation should be simulated.
      */
-    public void reduceItemStack(World world, BlockPos pos, EnumFacing side);
+    public void reduceItemStack(World world, BlockPos pos, EnumFacing side, boolean simulate);
 
     /**
      * Adds an itemstack.
@@ -52,9 +53,10 @@ public interface IItemStackProvider {
      * @param pos The position.
      * @param side The side.
      * @param itemStack The itemstack to set.
+     * @param simulate If the operation should be simulated.
      * @return If the insertion succeeded.
      */
-    public boolean addItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack);
+    public boolean addItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate);
 
     /**
      * Set the itemstack.
@@ -62,8 +64,9 @@ public interface IItemStackProvider {
      * @param pos The position.
      * @param side The side.
      * @param itemStack The itemstack to set.
+     * @param simulate If the operation should be simulated.
      * @return If the insertion succeeded.
      */
-    public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack);
+    public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate);
 
 }

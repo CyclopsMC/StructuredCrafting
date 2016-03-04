@@ -63,16 +63,16 @@ public class WorldCraftingMatrix {
         return null;
     }
 
-    protected boolean addItemStackForOutput(World world, BlockPos pos, EnumFacing side, List<IItemStackProvider> outputProviders, ItemStack itemStack) {
+    protected boolean addItemStackForOutput(World world, BlockPos pos, EnumFacing side, List<IItemStackProvider> outputProviders, ItemStack itemStack, boolean simulate) {
         for(IItemStackProvider provider : outputProviders) {
-            if(provider.addItemStack(world, pos, side, itemStack)) {
+            if(provider.addItemStack(world, pos, side, itemStack, simulate)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean craft() {
+    public boolean craft(boolean simulate) {
         // Check if at least one of the providers can write to the output target.
         List<IItemStackProvider> outputProviders = Lists.newLinkedList();
         for(IItemStackProvider provider : getItemStackProviders()) {
@@ -117,15 +117,15 @@ public class WorldCraftingMatrix {
         }
 
         // Determine output
-        if(itemStack != null && addItemStackForOutput(world, targetPos, targetSide, outputProviders, itemStack)) {
+        if(itemStack != null && addItemStackForOutput(world, targetPos, targetSide, outputProviders, itemStack, simulate)) {
             // Handle remaining container items: place blocks and drop items
             ItemStack[] remainingStacks = CraftingManager.getInstance().func_180303_b(INVENTORY_CRAFTING, world);
             for(int i = 0; i < remainingStacks.length; i++) {
                 ItemStack remainingStack = remainingStacks[i];
                 if(providers[i] != null) {
-                    providers[i].reduceItemStack(world, positions[i], inputSide);
+                    providers[i].reduceItemStack(world, positions[i], inputSide, simulate);
                     if (remainingStack != null && remainingStack.stackSize > 0) {
-                        providers[i].addItemStack(world, positions[i], inputSide, remainingStack);
+                        providers[i].addItemStack(world, positions[i], inputSide, remainingStack, simulate);
                     }
                 }
             }
