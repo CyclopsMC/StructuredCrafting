@@ -4,7 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import org.cyclops.cyclopscore.helper.ItemStackHelpers;
@@ -32,7 +32,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
         if(blockState != null) {
             Item item = Item.getItemFromBlock(blockState.getBlock());
             if(item != null) {
-                itemStack = new ItemStack(item, 1, blockState.getBlock().getDamageValue(world, pos));
+                itemStack = new ItemStack(item, 1, blockState.getBlock().damageDropped(blockState));
             }
         }
         return itemStack;

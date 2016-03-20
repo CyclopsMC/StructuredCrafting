@@ -1,14 +1,17 @@
 package org.cyclops.structuredcrafting.block;
 
 import com.google.common.collect.Lists;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.util.BlockPos;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.cyclops.cyclopscore.block.property.BlockProperty;
 import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
@@ -42,7 +45,7 @@ public class BlockStructuredCrafter extends ConfigurableBlockContainer {
         super(eConfig, Material.ground, TileStructuredCrafter.class);
 
         setHardness(2.0F);
-        setStepSound(soundTypeStone);
+        setStepSound(SoundType.STONE);
     }
 
     @Override
@@ -52,11 +55,11 @@ public class BlockStructuredCrafter extends ConfigurableBlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(playerIn != null && playerIn.getHeldItem() != null && playerIn.getHeldItem().getItem() == Items.stick) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(playerIn != null && heldItem != null && heldItem.getItem() == Items.stick) {
             this.rotateBlock(worldIn, pos, side);
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
 }
