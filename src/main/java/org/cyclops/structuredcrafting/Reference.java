@@ -14,7 +14,7 @@ public final class Reference {
     public static final String MOD_BUILD_NUMBER = "@BUILD_NUMBER@";
     public static final String MOD_MC_VERSION = "@MC_VERSION@";
     public static final String GA_TRACKING_ID = "UA-65307010-3";
-    public static final String VERSION_URL = "https://raw.githubusercontent.com/CyclopsMC/Versions/master/1.8/StructuredCrafting.txt";
+    public static final String VERSION_URL = "https://raw.githubusercontent.com/CyclopsMC/Versions/master/1.9/StructuredCrafting.txt";
 
     // MOD ID's
     public static final String MOD_FORGE = "Forge";
