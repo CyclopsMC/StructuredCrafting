@@ -119,7 +119,7 @@ public class WorldCraftingMatrix {
         // Determine output
         if(itemStack != null && addItemStackForOutput(world, targetPos, targetSide, outputProviders, itemStack, simulate)) {
             // Handle remaining container items: place blocks and drop items
-            ItemStack[] remainingStacks = CraftingManager.getInstance().func_180303_b(INVENTORY_CRAFTING, world);
+            ItemStack[] remainingStacks = CraftingManager.getInstance().getRemainingItems(INVENTORY_CRAFTING, world);
             for(int i = 0; i < remainingStacks.length; i++) {
                 ItemStack remainingStack = remainingStacks[i];
                 if(providers[i] != null) {

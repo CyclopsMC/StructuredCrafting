@@ -42,10 +42,10 @@ public class BlockStructuredCrafter extends ConfigurableBlockContainer {
      * @param eConfig Config for this block.
      */
     public BlockStructuredCrafter(ExtendedConfig eConfig) {
-        super(eConfig, Material.ground, TileStructuredCrafter.class);
+        super(eConfig, Material.GROUND, TileStructuredCrafter.class);
 
         setHardness(2.0F);
-        setStepSound(SoundType.STONE);
+        setSoundType(SoundType.STONE);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BlockStructuredCrafter extends ConfigurableBlockContainer {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(playerIn != null && heldItem != null && heldItem.getItem() == Items.stick) {
+        if(playerIn != null && heldItem != null && heldItem.getItem() == Items.STICK) {
             this.rotateBlock(worldIn, pos, side);
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
