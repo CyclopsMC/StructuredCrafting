@@ -3,6 +3,7 @@ package org.cyclops.structuredcrafting.craft;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -86,19 +87,19 @@ public class WorldCraftingMatrix {
 
         BlockPos[] positions = new BlockPos[9];
         IItemStackProvider[] providers = new IItemStackProvider[9];
-        ItemStack itemStack = null;
+        ItemStack itemStack = ItemStack.EMPTY;
         for(int k = 0; k < 3; k++) {
             // Set crafting grid
-            if(itemStack == null) {
+            if(itemStack.isEmpty()) {
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {
                         int arrayIndex = (j + 1) * 3 + (i + 1);
                         BlockPos pos = addInAxis(centerPos, axis, i, j);
                         Pair<ItemStack, IItemStackProvider> result = determineItemStackProviderForInput(world, pos, inputSide);
-                        ItemStack itemStackInput = result != null ? result.getLeft() : null;
-                        if (itemStackInput != null) {
+                        ItemStack itemStackInput = result != null ? result.getLeft() : ItemStack.EMPTY;
+                        if (!itemStackInput.isEmpty()) {
                             itemStackInput = itemStackInput.copy();
-                            itemStackInput.stackSize = 1;
+                            itemStackInput.setCount(1);
                         }
                         // This makes sure we can also accept recipes which are rotated, mirroring is already supported by Vanilla.
                         if (k == 0) {
@@ -117,14 +118,14 @@ public class WorldCraftingMatrix {
         }
 
         // Determine output
-        if(itemStack != null && addItemStackForOutput(world, targetPos, targetSide, outputProviders, itemStack, simulate)) {
+        if(!itemStack.isEmpty() && addItemStackForOutput(world, targetPos, targetSide, outputProviders, itemStack, simulate)) {
             // Handle remaining container items: place blocks and drop items
-            ItemStack[] remainingStacks = CraftingManager.getInstance().getRemainingItems(INVENTORY_CRAFTING, world);
-            for(int i = 0; i < remainingStacks.length; i++) {
-                ItemStack remainingStack = remainingStacks[i];
+            NonNullList<ItemStack> remainingStacks = CraftingManager.getInstance().getRemainingItems(INVENTORY_CRAFTING, world);
+            for(int i = 0; i < remainingStacks.size(); i++) {
+                ItemStack remainingStack = remainingStacks.get(i);
                 if(providers[i] != null) {
                     providers[i].reduceItemStack(world, positions[i], inputSide, simulate);
-                    if (remainingStack != null && remainingStack.stackSize > 0) {
+                    if (!remainingStack.isEmpty() && remainingStack.getCount() > 0) {
                         providers[i].addItemStack(world, positions[i], inputSide, remainingStack, simulate);
                     }
                 }
@@ -135,7 +136,7 @@ public class WorldCraftingMatrix {
     }
 
     public static WorldCraftingMatrix deriveMatrix(World world, BlockPos centerPos) {
-        EnumFacing side = ((EnumFacing) world.getBlockState(centerPos).getValue(BlockStructuredCrafter.FACING)).getOpposite();
+        EnumFacing side = (world.getBlockState(centerPos).getValue(BlockStructuredCrafter.FACING)).getOpposite();
         return new WorldCraftingMatrix(world, centerPos.offset(side), side.getAxis(),
                 centerPos.offset(side.getOpposite()), side.getOpposite());
     }

@@ -21,7 +21,7 @@ public class BlockStructuredCrafterConfig extends BlockContainerConfig {
         super(
             StructuredCrafting._instance,
             true,
-            "structuredCrafter",
+            "structured_crafter",
             null,
             BlockStructuredCrafter.class
         );

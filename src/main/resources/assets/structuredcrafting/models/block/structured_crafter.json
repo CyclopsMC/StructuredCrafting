@@ -1,12 +1,12 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "particle": "structuredcrafting:blocks/structuredCrafter_front",
-        "down"    : "structuredcrafting:blocks/structuredCrafter_down",
-        "up"      : "structuredcrafting:blocks/structuredCrafter_top",
-        "north"   : "structuredcrafting:blocks/structuredCrafter_front",
-        "east"    : "structuredcrafting:blocks/structuredCrafter_side",
-        "south"   : "structuredcrafting:blocks/structuredCrafter_side",
-        "west"    : "structuredcrafting:blocks/structuredCrafter_front"
+        "particle": "structuredcrafting:blocks/structured_crafter_front",
+        "down"    : "structuredcrafting:blocks/structured_crafter_down",
+        "up"      : "structuredcrafting:blocks/structured_crafter_top",
+        "north"   : "structuredcrafting:blocks/structured_crafter_front",
+        "east"    : "structuredcrafting:blocks/structured_crafter_side",
+        "south"   : "structuredcrafting:blocks/structured_crafter_side",
+        "west"    : "structuredcrafting:blocks/structured_crafter_front"
     }
 }

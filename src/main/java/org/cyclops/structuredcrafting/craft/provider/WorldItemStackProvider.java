@@ -28,7 +28,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
     public ItemStack getItemStack(World world, BlockPos pos, EnumFacing side) {
         IBlockState blockState = world.getBlockState(pos);
 
-        ItemStack itemStack = null;
+        ItemStack itemStack = ItemStack.EMPTY;
         if(blockState != null) {
             Item item = Item.getItemFromBlock(blockState.getBlock());
             if(item != null) {
@@ -54,9 +54,9 @@ public class WorldItemStackProvider implements IItemStackProvider {
     public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate) {
         if(!simulate && itemStack.getItem() instanceof ItemBlock) {
             world.setBlockState(pos, ((ItemBlock) itemStack.getItem()).getBlock().getStateFromMeta(itemStack.getItemDamage()));
-            itemStack.stackSize--;
+            itemStack.shrink(1);
         }
-        if(!simulate && itemStack.stackSize > 0) {
+        if(!simulate && itemStack.getCount() > 0) {
             ItemStackHelpers.spawnItemStack(world, pos, itemStack);
         }
         return true;

@@ -2,7 +2,7 @@
 <recipes>
 
 	<recipe type="shaped">
-		<condition type="config">structuredCrafter</condition>
+		<condition type="config">structured_crafter</condition>
 		<input>
 			<grid>
 				<gridrow>
@@ -23,7 +23,7 @@
 			</grid>
 		</input>
 		<output>
-			<item>structuredcrafting:structuredCrafter</item>
+			<item>structuredcrafting:structured_crafter</item>
 		</output>
 	</recipe>
 

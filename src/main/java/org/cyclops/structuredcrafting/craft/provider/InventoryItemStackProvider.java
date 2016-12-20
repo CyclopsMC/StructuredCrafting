@@ -20,7 +20,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
     protected Pair<Integer, ItemStack> getFirstItem(IInventory inventory, EnumFacing side) {
         for(int slot = 0; slot < inventory.getSizeInventory(); slot++) {
             ItemStack itemStack = inventory.getStackInSlot(slot);
-            if(itemStack != null) {
+            if(!itemStack.isEmpty()) {
                 return Pair.of(slot, itemStack);
             }
         }
@@ -30,7 +30,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
     protected Pair<Integer, ItemStack> getFirstItem(IItemHandler itemHandler, EnumFacing side) {
         for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
             ItemStack itemStack = itemHandler.getStackInSlot(slot);
-            if(itemStack != null) {
+            if(!itemStack.isEmpty()) {
                 return Pair.of(slot, itemStack);
             }
         }
@@ -64,7 +64,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
         IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
-                if(itemHandler.extractItem(slot, 1, simulate) != null) {
+                if(!itemHandler.extractItem(slot, 1, simulate).isEmpty()) {
                     break;
                 }
             }
@@ -72,9 +72,9 @@ public class InventoryItemStackProvider implements IItemStackProvider {
             IInventory inventory = TileHelpers.getSafeTile(world, pos, IInventory.class);
             Pair<Integer, ItemStack> result = getFirstItem(inventory, side);
             ItemStack newItemStack = result.getRight().copy();
-            newItemStack.stackSize--;
-            if (newItemStack.stackSize <= 0) {
-                newItemStack = null;
+            newItemStack.shrink(1);
+            if (newItemStack.getCount() <= 0) {
+                newItemStack = ItemStack.EMPTY;
             }
             if(!simulate) {
                 inventory.setInventorySlotContents(result.getLeft(), newItemStack);
@@ -87,7 +87,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
         IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
-                if(itemHandler.insertItem(slot, itemStack, simulate) == null) {
+                if(itemHandler.insertItem(slot, itemStack, simulate).isEmpty()) {
                     return true;
                 }
             }
@@ -107,7 +107,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
         IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
-                if(itemHandler.insertItem(slot, itemStack, simulate) == null) {
+                if(itemHandler.insertItem(slot, itemStack, simulate).isEmpty()) {
                     return true;
                 }
             }

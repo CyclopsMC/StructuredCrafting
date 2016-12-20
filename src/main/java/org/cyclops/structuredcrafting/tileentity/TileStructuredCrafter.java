@@ -25,7 +25,7 @@ public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsT
 
     public WorldCraftingMatrix getMatrix() {
         if(matrix == null) {
-            matrix = WorldCraftingMatrix.deriveMatrix(worldObj, pos);
+            matrix = WorldCraftingMatrix.deriveMatrix(world, pos);
         }
         return matrix;
     }
@@ -33,8 +33,8 @@ public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsT
     @Override
     protected void updateTileEntity() {
         tickOffset = (tickOffset + 1) % SPEED;
-        if(!worldObj.isRemote && tickOffset == 0) {
-            if(worldObj.isBlockPowered(getPos())) {
+        if(!world.isRemote && tickOffset == 0) {
+            if(world.isBlockPowered(getPos())) {
                 getMatrix().craft(false);
             } else {
                 matrix = null;
