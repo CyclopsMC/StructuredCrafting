@@ -14,15 +14,15 @@ public final class Reference {
     public static final String MOD_BUILD_NUMBER = "@BUILD_NUMBER@";
     public static final String MOD_MC_VERSION = "@MC_VERSION@";
     public static final String GA_TRACKING_ID = "UA-65307010-3";
-    public static final String VERSION_URL = "https://raw.githubusercontent.com/CyclopsMC/Versions/master/1.9/StructuredCrafting.txt";
+    public static final String VERSION_URL = "https://raw.githubusercontent.com/CyclopsMC/Versions/master/1.11/StructuredCrafting.txt";
 
     // MOD ID's
     public static final String MOD_FORGE = "forge";
     public static final String MOD_FORGE_VERSION = "@FORGE_VERSION@";
-    public static final String MOD_FORGE_VERSION_MIN = "13.19.1.2189";
+    public static final String MOD_FORGE_VERSION_MIN = "13.20.0.2201";
     public static final String MOD_CYCLOPSCORE = "cyclopscore";
     public static final String MOD_CYCLOPSCORE_MINVERSION = "@CYCLOPSCORE_VERSION@";
-    public static final String MOD_CYCLOPSCORE_VERSION_MIN = "0.7.0";
+    public static final String MOD_CYCLOPSCORE_VERSION_MIN = "0.8.2";
 
     // Dependencies
     public static final String MOD_DEPENDENCIES =
