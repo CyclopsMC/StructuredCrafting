@@ -1,6 +1,6 @@
 ## Structured Crafting
 
-[![Build Status](https://travis-ci.org/CyclopsMC/StructuredCrafting.svg?branch=master-1.9)](https://travis-ci.org/CyclopsMC/StructuredCrafting)
+[![Build Status](https://travis-ci.org/CyclopsMC/StructuredCrafting.svg?branch=master-1.11)](https://travis-ci.org/CyclopsMC/StructuredCrafting)
 [![Download](https://api.bintray.com/packages/cyclopsmc/dev/StructuredCrafting/images/download.svg) ](https://bintray.com/cyclopsmc/dev/StructuredCrafting/_latestVersion)
 [![CurseForge](http://cf.way2muchnoise.eu/full_233151_downloads.svg)](http://minecraft.curseforge.com/projects/233151)
 
