@@ -3,6 +3,7 @@ package org.cyclops.structuredcrafting.craft;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -113,14 +114,17 @@ public class WorldCraftingMatrix {
                         providers[arrayIndex] = result != null ? result.getRight() : null;
                     }
                 }
-                itemStack = CraftingManager.getInstance().findMatchingRecipe(INVENTORY_CRAFTING, world);
+                IRecipe recipe = CraftingManager.findMatchingRecipe(INVENTORY_CRAFTING, world);
+                if (recipe != null) {
+                    itemStack = recipe.getCraftingResult(INVENTORY_CRAFTING);
+                }
             }
         }
 
         // Determine output
         if(!itemStack.isEmpty() && addItemStackForOutput(world, targetPos, targetSide, outputProviders, itemStack, simulate)) {
             // Handle remaining container items: place blocks and drop items
-            NonNullList<ItemStack> remainingStacks = CraftingManager.getInstance().getRemainingItems(INVENTORY_CRAFTING, world);
+            NonNullList<ItemStack> remainingStacks = CraftingManager.getRemainingItems(INVENTORY_CRAFTING, world);
             for(int i = 0; i < remainingStacks.size(); i++) {
                 ItemStack remainingStack = remainingStacks.get(i);
                 if(providers[i] != null) {
