@@ -48,15 +48,18 @@ public class InventoryItemStackProvider implements IItemStackProvider {
     public boolean hasItemStack(World world, BlockPos pos, EnumFacing side) {
         IInventory inventory = TileHelpers.getSafeTile(world, pos, IInventory.class);
         IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-        return (itemHandler != null && getFirstItem(itemHandler, side) != null)
-                || (inventory != null && getFirstItem(inventory, side) != null);
+        return itemHandler != null || inventory != null;
     }
 
     @Override
     public ItemStack getItemStack(World world, BlockPos pos, EnumFacing side) {
         IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
         IInventory inventory = TileHelpers.getSafeTile(world, pos, IInventory.class);
-        return itemHandler != null ? getFirstItem(itemHandler, side).getRight() : getFirstItem(inventory, side).getRight();
+        Pair<Integer, ItemStack> result = itemHandler != null ? getFirstItem(itemHandler, side) : getFirstItem(inventory, side);
+        if (result != null) {
+            return result.getRight();
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override
