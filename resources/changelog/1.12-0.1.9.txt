@@ -1,0 +1,8 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 0.10.7 or higher.
+
+Changes:
+* Disable config version warning
+
+Fixes:
+* Fix conflicting handling of recipes that use inventories and blocks, Closes #6. Different possibilities are now checked in parallel.
