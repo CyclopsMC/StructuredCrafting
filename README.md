@@ -2,11 +2,11 @@
 
 [![Build Status](https://travis-ci.org/CyclopsMC/StructuredCrafting.svg?branch=master-1.11)](https://travis-ci.org/CyclopsMC/StructuredCrafting)
 [![Download](https://api.bintray.com/packages/cyclopsmc/dev/StructuredCrafting/images/download.svg) ](https://bintray.com/cyclopsmc/dev/StructuredCrafting/_latestVersion)
-[![CurseForge](http://cf.way2muchnoise.eu/full_233151_downloads.svg)](http://minecraft.curseforge.com/projects/233151)
+[![CurseForge](http://cf.way2muchnoise.eu/full_233151_downloads.svg)](https://minecraft.curseforge.com/projects/structured-crafting)
 
-All stable releases (including deobfuscated builds) can be found on [CurseForge](http://minecraft.curseforge.com/mc-mods/233151-structured-crafting/files).
+All stable releases (including deobfuscated builds) can be found on [CurseForge](https://minecraft.curseforge.com/projects/structured-crafting/files).
 
-More gameplay information can be found on [CurseForge](http://minecraft.curseforge.com/mc-mods/233151-structured-crafting).
+More gameplay information can be found on [CurseForge](https://minecraft.curseforge.com/projects/structured-crafting).
 
 
 ### Contributing
