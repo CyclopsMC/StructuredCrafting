@@ -22,7 +22,7 @@ public final class Reference {
     public static final String MOD_FORGE_VERSION_MIN = "14.21.1.2406";
     public static final String MOD_CYCLOPSCORE = "cyclopscore";
     public static final String MOD_CYCLOPSCORE_MINVERSION = "@CYCLOPSCORE_VERSION@";
-    public static final String MOD_CYCLOPSCORE_VERSION_MIN = "0.10.7";
+    public static final String MOD_CYCLOPSCORE_VERSION_MIN = "0.10.21";
 
     // Dependencies
     public static final String MOD_DEPENDENCIES =
