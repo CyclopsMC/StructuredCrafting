@@ -1,28 +1,89 @@
 package org.cyclops.structuredcrafting.craft;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.UncheckedExecutionException;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.structuredcrafting.StructuredCrafting;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProvider;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A crafting matrix represented with blockstates.
  * @author rubensworks
  */
 public class WorldCraftingMatrix {
+
+    private static final LoadingCache<Pair<WorldInventoryCrafting, Integer>, IRecipe> CACHE_RECIPES = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<Pair<WorldInventoryCrafting, Integer>, IRecipe>() {
+                @Override
+                public IRecipe load(Pair<WorldInventoryCrafting, Integer> key) throws Exception {
+                    IRecipe recipe = CraftingManager.findMatchingRecipe(key.getLeft(), DimensionManager.getWorld(key.getRight()));
+                    if (recipe == null) {
+                        recipe = NULL_RECIPE;
+                    }
+                    return recipe;
+                }
+            });
+    // A dummy recipe that represents null, because guava's cache doesn't allow null entries.
+    private static final IRecipe NULL_RECIPE = new IRecipe() {
+        @Override
+        public boolean matches(InventoryCrafting inv, World worldIn) {
+            return false;
+        }
+
+        @Override
+        public ItemStack getCraftingResult(InventoryCrafting inv) {
+            return null;
+        }
+
+        @Override
+        public boolean canFit(int width, int height) {
+            return false;
+        }
+
+        @Override
+        public ItemStack getRecipeOutput() {
+            return null;
+        }
+
+        @Override
+        public IRecipe setRegistryName(ResourceLocation name) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public ResourceLocation getRegistryName() {
+            return null;
+        }
+
+        @Override
+        public Class<IRecipe> getRegistryType() {
+            return null;
+        }
+    };
 
     private final World world;
     private final BlockPos centerPos;
@@ -178,8 +239,20 @@ public class WorldCraftingMatrix {
             providers[arrayIndex] = itemStackProvider;
         }
 
+        protected IRecipe getRecipe(World world) {
+            try {
+                IRecipe recipe = CACHE_RECIPES.get(Pair.of(inventoryCrafting, world.provider.getDimension()));
+                if (recipe == NULL_RECIPE) {
+                    recipe = null;
+                }
+                return recipe;
+            } catch (ExecutionException | UncheckedExecutionException e) {
+                return null;
+            }
+        }
+
         public ItemStack getOutput(World world) {
-            IRecipe recipe = CraftingManager.findMatchingRecipe(inventoryCrafting, world);
+            IRecipe recipe = getRecipe(world);
             if (recipe != null) {
                 return recipe.getCraftingResult(inventoryCrafting);
             }
@@ -193,7 +266,8 @@ public class WorldCraftingMatrix {
          * @param simulate If the crafting should be simulated.
          */
         public void handleRemainingItems(World world, EnumFacing inputSide, boolean simulate) {
-            NonNullList<ItemStack> remainingStacks = CraftingManager.getRemainingItems(inventoryCrafting, world);
+            IRecipe recipe = getRecipe(world);
+            NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(inventoryCrafting);
             for(int i = 0; i < remainingStacks.size(); i++) {
                 ItemStack remainingStack = remainingStacks.get(i);
                 if(providers[i] != null) {
