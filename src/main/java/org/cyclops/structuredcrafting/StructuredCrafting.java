@@ -29,7 +29,8 @@ import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafter;
      useMetadata = true,
      version = Reference.MOD_VERSION,
      dependencies = Reference.MOD_DEPENDENCIES,
-     guiFactory = "org.cyclops.structuredcrafting.GuiConfigOverview$ExtendedConfigGuiFactory"
+     guiFactory = "org.cyclops.structuredcrafting.GuiConfigOverview$ExtendedConfigGuiFactory",
+     certificateFingerprint = Reference.MOD_FINGERPRINT
 )
 public class StructuredCrafting extends ModBaseVersionable {
 

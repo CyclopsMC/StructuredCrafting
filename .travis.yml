@@ -8,6 +8,7 @@ env:
   global:
   - TERM=dumb
 
+before_install: openssl aes-256-cbc -K $encrypted_99720611c632_key -iv $encrypted_99720611c632_iv -in keystore.jks.enc -out keystore.jks -d
 install: ./gradlew setupCIWorkspace -S
 script: ./gradlew build -S
 
@@ -24,12 +25,14 @@ branches:
 
 deploy:
 - provider: script
+  skip_cleanup: true
   script: ./gradlew curseforge -S
   on:
     all_branches: true
     repo: CyclopsMC/StructuredCrafting
     tags: true
 - provider: releases
+  skip_cleanup: true
   api_key:
     secure: KYHDLGt9Udzjx6QS+orXNAVOj/Bo1qoWAK/cX7qUtzRWJ4ZASwfiRvnv80qaMQYLzFYE7qy4QPQ0j2BPUzxyyvYXwddoHbHlR8VPKCrBDeJV/AVaZzJfMx9bntNq9/X4DxF7o8kbLK6T9wkECNgZBi/cu57cvFkQWLbSNV5OQj/z7mURjZ7zlP7wI9tnQEwopvFWWlbh10VoVhN5uopMY+iVST7763EtZD3uG0LKLTrbJo4bM+DhxusfSVGrWMs586KM+xGLjOGiWgaoGxBV0T1f613dP9b3Ge38GJ6e0lgqgMQGHayTXrc0UhJ4TnNL8IhkM1No//bDOcQq8zb1f/FYspZuBiJqp7PbMyYSP81Zz+GHs0DPkcgrL2hSCFSVE2ACDU6lNwEO1WI66RlcYy1b2J3xZ7SJph//2hy0PKo2/R32GUfmbVxaSjGzmAy9xp+h6FYFlWxU9CXudV8vJTTwzaVpZQO3yoRyTjtb2DJAM9xoBeZjHSkK15CKky6minPrdgxWs3g+5lVNYFIJXPYX6G4dZdyRGqu7TV8L3tBm1AA9jM9LRRDhFQQu0lvnAj7eULZWM2WbLA/sEAwC9mgL1+BSpwSctMx1SagNIR+djH3CbxhxkyC1ST7nzIJ5H622+DJwx8pFgxF6aZ8Jl/e6OY/cXKUhhMUwKv6VOZQ=
   on:
@@ -37,6 +40,7 @@ deploy:
     repo: CyclopsMC/StructuredCrafting
     tags: true
 - provider: script
+  skip_cleanup: true
   script: ./gradlew uploadArchives -S
   on:
     all_branches: true
