@@ -4,10 +4,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import org.cyclops.cyclopscore.helper.ItemStackHelpers;
+import org.cyclops.cyclopscore.helper.TileHelpers;
 
 /**
  * World that can provide an itemstack.
@@ -32,7 +35,21 @@ public class WorldItemStackProvider implements IItemStackProvider {
         if(blockState != null) {
             Item item = Item.getItemFromBlock(blockState.getBlock());
             if(item != null) {
-                itemStack = new ItemStack(item, 1, blockState.getBlock().damageDropped(blockState));
+                // Don't take into account this block if it has a non-empty inventory
+                IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+                boolean emptyItemHandler = true;
+                if (itemHandler != null) {
+                    for (int i = 0; i < itemHandler.getSlots(); i++) {
+                        if (!itemHandler.extractItem(i, 1, true).isEmpty()) {
+                            emptyItemHandler = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (emptyItemHandler) {
+                    itemStack = new ItemStack(item, 1, blockState.getBlock().damageDropped(blockState));
+                }
             }
         }
         return itemStack;
