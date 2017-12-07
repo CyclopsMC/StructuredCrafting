@@ -1,13 +1,14 @@
 ## Structured Crafting
 
 [![Build Status](https://travis-ci.org/CyclopsMC/StructuredCrafting.svg?branch=master-1.11)](https://travis-ci.org/CyclopsMC/StructuredCrafting)
-[![Download](https://api.bintray.com/packages/cyclopsmc/dev/StructuredCrafting/images/download.svg) ](https://bintray.com/cyclopsmc/dev/StructuredCrafting/_latestVersion)
+[![Download](https://img.shields.io/maven-metadata/v/http/cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/structuredcrafting/StructuredCrafting/maven-metadata.xml.svg) ](https://cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/structuredcrafting/StructuredCrafting/)
 [![CurseForge](http://cf.way2muchnoise.eu/full_233151_downloads.svg)](https://minecraft.curseforge.com/projects/structured-crafting)
 
 All stable releases (including deobfuscated builds) can be found on [CurseForge](https://minecraft.curseforge.com/projects/structured-crafting/files).
 
 More gameplay information can be found on [CurseForge](https://minecraft.curseforge.com/projects/structured-crafting).
 
+[Development builds](https://cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/structuredcrafting/StructuredCrafting/) are hosted by [JFrog Artifactory](https://www.jfrog.com/artifactory/).
 
 ### Contributing
 * Before submitting a pull request containing a new feature, please discuss this first with one of the lead developers.
