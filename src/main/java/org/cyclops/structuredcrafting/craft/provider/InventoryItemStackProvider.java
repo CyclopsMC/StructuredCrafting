@@ -29,7 +29,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
 
     protected Pair<Integer, ItemStack> getFirstItem(IItemHandler itemHandler, EnumFacing side) {
         for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
-            ItemStack itemStack = itemHandler.getStackInSlot(slot);
+            ItemStack itemStack = itemHandler.extractItem(slot, 1, true);
             if(!itemStack.isEmpty()) {
                 return Pair.of(slot, itemStack);
             }
