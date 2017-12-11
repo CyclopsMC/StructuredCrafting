@@ -1,0 +1,7 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 0.10.22 or higher.
+
+Fixes:
+* Fix item dupe exploit with TCon Drying Racks, Closes #16
+* Fix inventories being deleted because of overlapping recipes, Closes #17
+* Fix recipe caching problems
