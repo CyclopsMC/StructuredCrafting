@@ -23,7 +23,7 @@ public class WorldInventoryCrafting extends InventoryCrafting {
     }
 
     public void setItemStack(int row, int col, ItemStack itemStack) {
-        setInventorySlotContents(col * 3 + row, itemStack);
+        setInventorySlotContents(col * 3 + row, itemStack.copy());
     }
 
     @Override
