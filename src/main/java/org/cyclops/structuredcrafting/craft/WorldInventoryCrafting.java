@@ -56,4 +56,14 @@ public class WorldInventoryCrafting extends InventoryCrafting {
         return Objects.hashCode(itemStack.getCount(), itemStack.getMetadata(),
                 Item.getIdFromItem(itemStack.getItem()), itemStack.hasTagCompound() ? itemStack.getTagCompound() : 0);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < this.getSizeInventory(); i++) {
+            sb.append(this.getStackInSlot(i));
+            sb.append(",");
+        }
+        return sb.toString();
+    }
 }

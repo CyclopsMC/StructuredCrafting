@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.UncheckedExecutionException;
+import lombok.ToString;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * A crafting matrix represented with blockstates.
@@ -216,6 +218,7 @@ public class WorldCraftingMatrix {
                 centerPos.offset(side.getOpposite()), side.getOpposite());
     }
 
+    @ToString
     public static class CraftingPossibility {
         private final WorldInventoryCrafting inventoryCrafting = new WorldInventoryCrafting();
         private final BlockPos[] positions = new BlockPos[9];
@@ -269,8 +272,9 @@ public class WorldCraftingMatrix {
             IRecipe recipe = getRecipe(world);
             NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(inventoryCrafting);
             for(int i = 0; i < remainingStacks.size(); i++) {
+                ItemStack originalStack = inventoryCrafting.getStackInSlot(i);
                 ItemStack remainingStack = remainingStacks.get(i);
-                if(providers[i] != null) {
+                if(providers[i] != null && originalStack != null && !originalStack.isEmpty()) {
                     providers[i].reduceItemStack(world, positions[i], inputSide, simulate);
                     if (!remainingStack.isEmpty() && remainingStack.getCount() > 0) {
                         providers[i].addItemStack(world, positions[i], inputSide, remainingStack, simulate);

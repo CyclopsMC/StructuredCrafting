@@ -22,9 +22,23 @@ public class WorldItemStackProvider implements IItemStackProvider {
         return world.isAirBlock(pos);
     }
 
+    protected boolean hasEmptyItemHandler(World world, BlockPos pos, EnumFacing side) {
+        IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+        boolean emptyItemHandler = true;
+        if (itemHandler != null) {
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                if (!itemHandler.extractItem(i, 1, true).isEmpty()) {
+                    emptyItemHandler = false;
+                    break;
+                }
+            }
+        }
+        return emptyItemHandler;
+    }
+
     @Override
     public boolean hasItemStack(World world, BlockPos pos, EnumFacing side) {
-        return !world.isAirBlock(pos);
+        return !world.isAirBlock(pos) && !hasEmptyItemHandler(world, pos, side);
     }
 
     @Override
@@ -34,22 +48,8 @@ public class WorldItemStackProvider implements IItemStackProvider {
         ItemStack itemStack = ItemStack.EMPTY;
         if(blockState != null) {
             Item item = Item.getItemFromBlock(blockState.getBlock());
-            if(item != null) {
-                // Don't take into account this block if it has a non-empty inventory
-                IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-                boolean emptyItemHandler = true;
-                if (itemHandler != null) {
-                    for (int i = 0; i < itemHandler.getSlots(); i++) {
-                        if (!itemHandler.extractItem(i, 1, true).isEmpty()) {
-                            emptyItemHandler = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (emptyItemHandler) {
-                    itemStack = new ItemStack(item, 1, blockState.getBlock().damageDropped(blockState));
-                }
+            if(item != null && !hasEmptyItemHandler(world, pos, side)) {
+                itemStack = new ItemStack(item, 1, blockState.getBlock().damageDropped(blockState));
             }
         }
         return itemStack;
