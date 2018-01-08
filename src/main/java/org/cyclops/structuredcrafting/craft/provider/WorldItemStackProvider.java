@@ -38,7 +38,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
 
     @Override
     public boolean hasItemStack(World world, BlockPos pos, EnumFacing side) {
-        return !world.isAirBlock(pos) && !hasEmptyItemHandler(world, pos, side);
+        return !world.isAirBlock(pos) && hasEmptyItemHandler(world, pos, side);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
         ItemStack itemStack = ItemStack.EMPTY;
         if(blockState != null) {
             Item item = Item.getItemFromBlock(blockState.getBlock());
-            if(item != null && !hasEmptyItemHandler(world, pos, side)) {
+            if(item != null && hasEmptyItemHandler(world, pos, side)) {
                 itemStack = new ItemStack(item, 1, blockState.getBlock().damageDropped(blockState));
             }
         }
