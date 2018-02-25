@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.Level;
 import org.cyclops.structuredcrafting.StructuredCrafting;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProvider;
@@ -26,10 +27,8 @@ import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * A crafting matrix represented with blockstates.
@@ -229,15 +228,22 @@ public class WorldCraftingMatrix {
         }
 
         public void setPosition(int i, int j, int rotation, BlockPos pos, IItemStackProvider itemStackProvider, ItemStack itemStack) {
-            int arrayIndex = (j + 1) * 3 + (i + 1);
+            int row, col;
             // This makes sure we can also accept recipes which are rotated, mirroring is already supported by Vanilla.
             if (rotation == 0) {
-                inventoryCrafting.setItemStack(i + 1, j + 1, itemStack);
+                row = i + 1;
+                col = j + 1;
             } else if(rotation == 1) {
-                inventoryCrafting.setItemStack(j + 1, i + 1, itemStack);
+                row = j + 1;
+                col = i + 1;
             } else if(rotation == 2) {
-                inventoryCrafting.setItemStack(i + 1, 2 - (j + 1), itemStack);
+                row = i + 1;
+                col = 2 - (j + 1);
+            } else {
+                throw new IllegalStateException("Invalid rotation: " + rotation);
             }
+            inventoryCrafting.setItemStack(row, col, itemStack);
+            int arrayIndex = col * 3 + row;
             positions[arrayIndex] = pos;
             providers[arrayIndex] = itemStackProvider;
         }
@@ -274,10 +280,15 @@ public class WorldCraftingMatrix {
             for(int i = 0; i < remainingStacks.size(); i++) {
                 ItemStack originalStack = inventoryCrafting.getStackInSlot(i);
                 ItemStack remainingStack = remainingStacks.get(i);
-                if(providers[i] != null && originalStack != null && !originalStack.isEmpty()) {
-                    providers[i].reduceItemStack(world, positions[i], inputSide, simulate);
-                    if (!remainingStack.isEmpty() && remainingStack.getCount() > 0) {
-                        providers[i].addItemStack(world, positions[i], inputSide, remainingStack, simulate);
+                if(originalStack != null && !originalStack.isEmpty()) {
+                    if (providers[i] != null) {
+                        providers[i].reduceItemStack(world, positions[i], inputSide, simulate);
+                        if (!remainingStack.isEmpty() && remainingStack.getCount() > 0) {
+                            providers[i].addItemStack(world, positions[i], inputSide, remainingStack, simulate);
+                        }
+                    } else {
+                        StructuredCrafting.clog(Level.WARN, "The structured crafting provider for position "
+                                + i + " did not exist for stack " + originalStack);
                     }
                 }
             }
