@@ -121,7 +121,7 @@ public class WorldCraftingMatrix {
     protected Map<ItemStack, IItemStackProvider> determineItemStackProviderForInput(World world, BlockPos pos, EnumFacing side) {
         Map<ItemStack, IItemStackProvider> providers = Maps.newHashMap();
         for(IItemStackProvider provider : getItemStackProviders()) {
-            if(provider.hasItemStack(world, pos, side)) {
+            if(provider.canProvideInput() && provider.hasItemStack(world, pos, side)) {
                 providers.put(provider.getItemStack(world, pos, side), provider);
             }
         }
@@ -130,7 +130,7 @@ public class WorldCraftingMatrix {
 
     protected boolean addItemStackForOutput(World world, BlockPos pos, EnumFacing side, List<IItemStackProvider> outputProviders, ItemStack itemStack, boolean simulate) {
         for(IItemStackProvider provider : outputProviders) {
-            if(provider.addItemStack(world, pos, side, itemStack, simulate)) {
+            if(provider.canHandleOutput() && provider.addItemStack(world, pos, side, itemStack, simulate)) {
                 return true;
             }
         }

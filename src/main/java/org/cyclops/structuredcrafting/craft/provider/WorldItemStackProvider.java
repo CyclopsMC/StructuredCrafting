@@ -11,12 +11,23 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.cyclops.cyclopscore.helper.ItemStackHelpers;
 import org.cyclops.cyclopscore.helper.TileHelpers;
+import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
 
 /**
  * World that can provide an itemstack.
  * @author rubensworks
  */
 public class WorldItemStackProvider implements IItemStackProvider {
+    @Override
+    public boolean canProvideInput() {
+        return BlockStructuredCrafterConfig.canTakeInputsFromWorld;
+    }
+
+    @Override
+    public boolean canHandleOutput() {
+        return BlockStructuredCrafterConfig.canPlaceOutputsIntoWorld;
+    }
+
     @Override
     public boolean isValidForResults(World world, BlockPos pos, EnumFacing side) {
         return world.isAirBlock(pos);

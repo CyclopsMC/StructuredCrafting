@@ -12,6 +12,16 @@ import net.minecraft.world.World;
 public interface IItemStackProvider {
 
     /**
+     * @return If this provider can provide item inputs.
+     */
+    public boolean canProvideInput();
+
+    /**
+     * @return If this provider can handle item outputs.
+     */
+    public boolean canHandleOutput();
+
+    /**
      * Check if the given target is valid for output results for this provider type.
      * @param world The world.
      * @param pos The position.

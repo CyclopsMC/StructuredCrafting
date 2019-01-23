@@ -10,6 +10,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.cyclopscore.helper.InventoryHelpers;
 import org.cyclops.cyclopscore.helper.TileHelpers;
+import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
 
 /**
  * Inventory that can provide itemstacks.
@@ -35,6 +36,16 @@ public class InventoryItemStackProvider implements IItemStackProvider {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean canProvideInput() {
+        return BlockStructuredCrafterConfig.canTakeInputsFromInventory;
+    }
+
+    @Override
+    public boolean canHandleOutput() {
+        return BlockStructuredCrafterConfig.canPlaceOutputsIntoInventory;
     }
 
     @Override
