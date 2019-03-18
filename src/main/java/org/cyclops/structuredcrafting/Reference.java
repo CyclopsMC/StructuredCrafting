@@ -20,10 +20,10 @@ public final class Reference {
     // MOD ID's
     public static final String MOD_FORGE = "forge";
     public static final String MOD_FORGE_VERSION = "@FORGE_VERSION@";
-    public static final String MOD_FORGE_VERSION_MIN = "14.23.1.2555";
+    public static final String MOD_FORGE_VERSION_MIN = "14.23.5.2768";
     public static final String MOD_CYCLOPSCORE = "cyclopscore";
     public static final String MOD_CYCLOPSCORE_MINVERSION = "@CYCLOPSCORE_VERSION@";
-    public static final String MOD_CYCLOPSCORE_VERSION_MIN = "0.10.21";
+    public static final String MOD_CYCLOPSCORE_VERSION_MIN = "1.0.6";
 
     // Dependencies
     public static final String MOD_DEPENDENCIES =
