@@ -1,15 +1,14 @@
 package org.cyclops.structuredcrafting;
 
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.Level;
 import org.cyclops.cyclopscore.config.ConfigHandler;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockItemConfigReference;
-import org.cyclops.cyclopscore.init.ItemCreativeTab;
+import org.cyclops.cyclopscore.init.ItemGroupMod;
 import org.cyclops.cyclopscore.init.ModBaseVersionable;
-import org.cyclops.cyclopscore.init.RecipeHandler;
 import org.cyclops.cyclopscore.modcompat.ModCompatLoader;
+import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
@@ -18,35 +17,23 @@ import org.cyclops.structuredcrafting.craft.provider.ItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.WorldItemStackProvider;
 import org.cyclops.structuredcrafting.modcompat.capabilities.WorkerStructuredCrafterTileCompat;
 import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafter;
+import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafterConfig;
 
 /**
  * The main mod class of StructuredCrafting.
  * @author rubensworks
  *
  */
-@Mod(modid = Reference.MOD_ID,
-     name = Reference.MOD_NAME,
-     useMetadata = true,
-     version = Reference.MOD_VERSION,
-     dependencies = Reference.MOD_DEPENDENCIES,
-     guiFactory = "org.cyclops.structuredcrafting.GuiConfigOverview$ExtendedConfigGuiFactory",
-     certificateFingerprint = Reference.MOD_FINGERPRINT
-)
-public class StructuredCrafting extends ModBaseVersionable {
+@Mod(Reference.MOD_ID)
+public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
 
     /**
      * The unique instance of this mod.
      */
-    @Mod.Instance(value = Reference.MOD_ID)
     public static StructuredCrafting _instance;
 
     public StructuredCrafting() {
-        super(Reference.MOD_ID, Reference.MOD_NAME, Reference.MOD_VERSION);
-    }
-
-    @Override
-    protected RecipeHandler constructRecipeHandler() {
-        return new RecipeHandler(this, "recipes.xml");
+        super(Reference.MOD_ID, (instance) -> _instance = instance);
     }
 
     @Override
@@ -57,60 +44,40 @@ public class StructuredCrafting extends ModBaseVersionable {
         getCapabilityConstructorRegistry().registerTile(TileStructuredCrafter.class, new WorkerStructuredCrafterTileCompat());
     }
 
-    @Mod.EventHandler
     @Override
-    public final void preInit(FMLPreInitializationEvent event) {
+    protected void setup(FMLCommonSetupEvent event) {
         getRegistryManager().addRegistry(IItemStackProviderRegistry.class, new ItemStackProviderRegistry());
 
-        super.preInit(event);
-    }
-
-    @Mod.EventHandler
-    @Override
-    public final void init(FMLInitializationEvent event) {
-        super.init(event);
+        super.setup(event);
 
         IItemStackProviderRegistry registry = getRegistryManager().getRegistry(IItemStackProviderRegistry.class);
         registry.registerProvider(new InventoryItemStackProvider());
         registry.registerProvider(new WorldItemStackProvider());
     }
 
-    @Mod.EventHandler
     @Override
-    public final void postInit(FMLPostInitializationEvent event) {
-        super.postInit(event);
-    }
-
-    @Mod.EventHandler
-    @Override
-    public void onServerStarted(FMLServerStartedEvent event) {
-        super.onServerStarted(event);
-    }
-
-    @Mod.EventHandler
-    @Override
-    public void onServerStopping(FMLServerStoppingEvent event) {
-        super.onServerStopping(event);
-    }
-
-    @Override
-    public CreativeTabs constructDefaultCreativeTab() {
-        return new ItemCreativeTab(this, new BlockItemConfigReference(BlockStructuredCrafterConfig.class));
-    }
-
-    @Override
-    public void onGeneralConfigsRegister(ConfigHandler configHandler) {
-        configHandler.add(new GeneralConfig());
-    }
-
-    @Override
-    public void onMainConfigsRegister(ConfigHandler configHandler) {
-        Configs.registerBlocks(configHandler);
-    }
-
-    @Override
-    public ICommonProxy getProxy() {
+    protected IClientProxy constructClientProxy() {
         return null;
+    }
+
+    @Override
+    protected ICommonProxy constructCommonProxy() {
+        return null;
+    }
+
+    @Override
+    protected ItemGroup constructDefaultItemGroup() {
+        return new ItemGroupMod(this, () -> RegistryEntries.ITEM_STRUCTURED_CRAFTER);
+    }
+
+    @Override
+    protected void onConfigsRegister(ConfigHandler configHandler) {
+        super.onConfigsRegister(configHandler);
+
+        configHandler.addConfigurable(new GeneralConfig());
+
+        configHandler.addConfigurable(new BlockStructuredCrafterConfig());
+        configHandler.addConfigurable(new TileStructuredCrafterConfig());
     }
 
     /**

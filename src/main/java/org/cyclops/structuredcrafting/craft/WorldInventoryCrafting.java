@@ -1,9 +1,10 @@
 package org.cyclops.structuredcrafting.craft;
 
 import com.google.common.base.Objects;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -11,12 +12,12 @@ import net.minecraft.item.ItemStack;
  * A world-based implementation of the crafting container.
  * @author rubensworks
  */
-public class WorldInventoryCrafting extends InventoryCrafting {
+public class WorldInventoryCrafting extends CraftingInventory {
 
     public WorldInventoryCrafting() {
-        super(new Container() {
+        super(new Container(ContainerType.CRAFTING, 0) {
             @Override
-            public boolean canInteractWith(EntityPlayer playerIn) {
+            public boolean canInteractWith(PlayerEntity playerIn) {
                 return false;
             }
         }, 3, 3);
@@ -53,8 +54,8 @@ public class WorldInventoryCrafting extends InventoryCrafting {
         if (itemStack == null) {
             return 0;
         }
-        return Objects.hashCode(itemStack.getCount(), itemStack.getMetadata(),
-                Item.getIdFromItem(itemStack.getItem()), itemStack.hasTagCompound() ? itemStack.getTagCompound() : 0);
+        return Objects.hashCode(itemStack.getCount(), Item.getIdFromItem(itemStack.getItem()),
+                itemStack.hasTag() ? itemStack.getTag() : 0);
     }
 
     @Override

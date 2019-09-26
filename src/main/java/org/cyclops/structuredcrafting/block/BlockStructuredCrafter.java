@@ -1,66 +1,59 @@
 package org.cyclops.structuredcrafting.block;
 
-import com.google.common.collect.Lists;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.Items;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
-import org.cyclops.cyclopscore.block.property.BlockProperty;
-import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
-import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
+import org.cyclops.cyclopscore.block.BlockTile;
 import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafter;
+
+import javax.annotation.Nullable;
 
 /**
  * This block will detect neighbour block updates and will try to craft a new block/item from them.
  * @author rubensworks
  */
-public class BlockStructuredCrafter extends ConfigurableBlockContainer {
+public class BlockStructuredCrafter extends BlockTile {
 
-    @BlockProperty
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", Lists.newArrayList(EnumFacing.VALUES));
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    private static BlockStructuredCrafter _instance = null;
+    public BlockStructuredCrafter(Block.Properties properties) {
+        super(properties, TileStructuredCrafter::new);
 
-    /**
-     * Get the unique instance.
-     * @return The instance.
-     */
-    public static BlockStructuredCrafter getInstance() {
-        return _instance;
-    }
-
-    /**
-     * Make a new block instance.
-     * @param eConfig Config for this block.
-     */
-    public BlockStructuredCrafter(ExtendedConfig eConfig) {
-        super(eConfig, Material.GROUND, TileStructuredCrafter.class);
-
-        setHardness(2.0F);
-        setSoundType(SoundType.STONE);
+        this.setDefaultState(this.stateContainer.getBaseState()
+                .with(FACING, Direction.DOWN));
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
-                                     int meta, EntityLivingBase placer, EnumHand hand) {
-        return this.getDefaultState().withProperty(FACING, facing.getOpposite());
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState()
+                .with(FACING, context.getFace().getOpposite());
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        ItemStack heldItem = playerIn.getHeldItem(hand);
-        if(playerIn != null && !heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
-            this.rotateBlock(worldIn, pos, side);
+    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
+                                    BlockRayTraceResult hit) {
+        ItemStack heldItem = player.getHeldItem(hand);
+        if(player != null && !heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
+            worldIn.setBlockState(pos, state.with(FACING, hit.getFace().getOpposite()));
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(state, worldIn, pos, player, hand, hit);
     }
 
 }

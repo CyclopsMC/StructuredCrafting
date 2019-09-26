@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SCS",
+    "IRI",
+    "SCS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "C": {
+      "tag": "cobblestone"
+    },
+    "I": {
+      "tag": "ingots/iron"
+    },
+    "R": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "result": {
+    "item": "structuredcrafting:structured_crafter"
+  }
+}

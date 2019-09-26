@@ -1,10 +1,10 @@
 package org.cyclops.structuredcrafting.craft.provider;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -29,12 +29,12 @@ public class WorldItemStackProvider implements IItemStackProvider {
     }
 
     @Override
-    public boolean isValidForResults(World world, BlockPos pos, EnumFacing side) {
+    public boolean isValidForResults(World world, BlockPos pos, Direction side) {
         return world.isAirBlock(pos);
     }
 
-    protected boolean hasEmptyItemHandler(World world, BlockPos pos, EnumFacing side) {
-        IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+    protected boolean hasEmptyItemHandler(World world, BlockPos pos, Direction side) {
+        IItemHandler itemHandler = TileHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         boolean emptyItemHandler = true;
         if (itemHandler != null) {
             for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -48,40 +48,40 @@ public class WorldItemStackProvider implements IItemStackProvider {
     }
 
     @Override
-    public boolean hasItemStack(World world, BlockPos pos, EnumFacing side) {
+    public boolean hasItemStack(World world, BlockPos pos, Direction side) {
         return !world.isAirBlock(pos) && hasEmptyItemHandler(world, pos, side);
     }
 
     @Override
-    public ItemStack getItemStack(World world, BlockPos pos, EnumFacing side) {
-        IBlockState blockState = world.getBlockState(pos);
+    public ItemStack getItemStack(World world, BlockPos pos, Direction side) {
+        BlockState blockState = world.getBlockState(pos);
 
         ItemStack itemStack = ItemStack.EMPTY;
         if(blockState != null) {
             Item item = Item.getItemFromBlock(blockState.getBlock());
             if(item != null && hasEmptyItemHandler(world, pos, side)) {
-                itemStack = new ItemStack(item, 1, blockState.getBlock().damageDropped(blockState));
+                itemStack = new ItemStack(item, 1);
             }
         }
         return itemStack;
     }
 
     @Override
-    public void reduceItemStack(World world, BlockPos pos, EnumFacing side, boolean simulate) {
+    public void reduceItemStack(World world, BlockPos pos, Direction side, boolean simulate) {
         if(!simulate) {
-            world.setBlockToAir(pos);
+            world.removeBlock(pos, false);
         }
     }
 
     @Override
-    public boolean addItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate) {
+    public boolean addItemStack(World world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate) {
         return setItemStack(world, pos, side, itemStack, simulate);
     }
 
     @Override
-    public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate) {
-        if(!simulate && itemStack.getItem() instanceof ItemBlock) {
-            world.setBlockState(pos, ((ItemBlock) itemStack.getItem()).getBlock().getStateFromMeta(itemStack.getItemDamage()));
+    public boolean setItemStack(World world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate) {
+        if(!simulate && itemStack.getItem() instanceof BlockItem) {
+            world.setBlockState(pos, ((BlockItem) itemStack.getItem()).getBlock().getDefaultState());
             itemStack.shrink(1);
         }
         if(!simulate && itemStack.getCount() > 0) {

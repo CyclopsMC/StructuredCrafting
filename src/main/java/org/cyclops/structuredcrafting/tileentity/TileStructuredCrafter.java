@@ -2,6 +2,7 @@ package org.cyclops.structuredcrafting.tileentity;
 
 import lombok.experimental.Delegate;
 import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
+import org.cyclops.structuredcrafting.RegistryEntries;
 import org.cyclops.structuredcrafting.craft.WorldCraftingMatrix;
 
 /**
@@ -20,6 +21,7 @@ public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsT
     private int tickOffset;
 
     public TileStructuredCrafter() {
+        super(RegistryEntries.TILE_STRUCTURED_CRAFTER);
         tickOffset = (int) (Math.random() * (float) SPEED);
     }
 

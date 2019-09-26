@@ -2,7 +2,7 @@ package org.cyclops.structuredcrafting.craft.provider;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 /**
@@ -28,7 +28,7 @@ public interface IItemStackProvider {
      * @param side The side.
      * @return If valid.
      */
-    public boolean isValidForResults(World world, BlockPos pos, EnumFacing side);
+    public boolean isValidForResults(World world, BlockPos pos, Direction side);
 
     /**
      * If the given provider has an itemstack at the given position.
@@ -37,7 +37,7 @@ public interface IItemStackProvider {
      * @param side The side.
      * @return If it has an itemstack.
      */
-    public boolean hasItemStack(World world, BlockPos pos, EnumFacing side);
+    public boolean hasItemStack(World world, BlockPos pos, Direction side);
 
     /**
      * The itemstack at the given position.
@@ -46,7 +46,7 @@ public interface IItemStackProvider {
      * @param side The side.
      * @return The itemstack at the given position.
      */
-    public ItemStack getItemStack(World world, BlockPos pos, EnumFacing side);
+    public ItemStack getItemStack(World world, BlockPos pos, Direction side);
 
     /**
      * Consumes one amount of the itemstack, will only work if such a stack existed.
@@ -55,7 +55,7 @@ public interface IItemStackProvider {
      * @param side The side.
      * @param simulate If the operation should be simulated.
      */
-    public void reduceItemStack(World world, BlockPos pos, EnumFacing side, boolean simulate);
+    public void reduceItemStack(World world, BlockPos pos, Direction side, boolean simulate);
 
     /**
      * Adds an itemstack.
@@ -66,7 +66,7 @@ public interface IItemStackProvider {
      * @param simulate If the operation should be simulated.
      * @return If the insertion succeeded.
      */
-    public boolean addItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate);
+    public boolean addItemStack(World world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate);
 
     /**
      * Set the itemstack.
@@ -77,6 +77,6 @@ public interface IItemStackProvider {
      * @param simulate If the operation should be simulated.
      * @return If the insertion succeeded.
      */
-    public boolean setItemStack(World world, BlockPos pos, EnumFacing side, ItemStack itemStack, boolean simulate);
+    public boolean setItemStack(World world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate);
 
 }

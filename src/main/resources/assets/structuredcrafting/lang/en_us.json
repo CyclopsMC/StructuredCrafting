@@ -1,0 +1,7 @@
+{
+  "_comment": "General",
+  "itemGroup.structuredcrafting": "Structured Crafting",
+
+  "_comment": "Blocks",
+  "block.structuredcrafting.structured_crafter": "Structured Crafter"
+}

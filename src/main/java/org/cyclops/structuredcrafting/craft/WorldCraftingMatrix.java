@@ -7,16 +7,20 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import lombok.ToString;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Level;
 import org.cyclops.structuredcrafting.StructuredCrafting;
@@ -24,7 +28,6 @@ import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProvider;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -36,11 +39,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class WorldCraftingMatrix {
 
-    private static final LoadingCache<Pair<WorldInventoryCrafting, Integer>, IRecipe> CACHE_RECIPES = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<Pair<WorldInventoryCrafting, Integer>, IRecipe>() {
+    private static final LoadingCache<Pair<WorldInventoryCrafting, DimensionType>, IRecipe> CACHE_RECIPES = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<Pair<WorldInventoryCrafting, DimensionType>, IRecipe>() {
                 @Override
-                public IRecipe load(Pair<WorldInventoryCrafting, Integer> key) throws Exception {
-                    IRecipe recipe = CraftingManager.findMatchingRecipe(key.getLeft(), DimensionManager.getWorld(key.getRight()));
+                public IRecipe load(Pair<WorldInventoryCrafting, DimensionType> key) throws Exception {
+                    ServerWorld world = DimensionManager.getWorld(ServerLifecycleHooks.getCurrentServer(), key.getRight(), false, false);
+                    IRecipe recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, key.getLeft(), world).orElse(null);
+
                     if (recipe == null) {
                         recipe = NULL_RECIPE;
                     }
@@ -49,13 +54,14 @@ public class WorldCraftingMatrix {
             });
     // A dummy recipe that represents null, because guava's cache doesn't allow null entries.
     private static final IRecipe NULL_RECIPE = new IRecipe() {
+
         @Override
-        public boolean matches(InventoryCrafting inv, World worldIn) {
+        public boolean matches(IInventory inv, World worldIn) {
             return false;
         }
 
         @Override
-        public ItemStack getCraftingResult(InventoryCrafting inv) {
+        public ItemStack getCraftingResult(IInventory inv) {
             return null;
         }
 
@@ -70,30 +76,29 @@ public class WorldCraftingMatrix {
         }
 
         @Override
-        public IRecipe setRegistryName(ResourceLocation name) {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getRegistryName() {
+        public ResourceLocation getId() {
             return null;
         }
 
         @Override
-        public Class<IRecipe> getRegistryType() {
+        public IRecipeSerializer<?> getSerializer() {
+            return null;
+        }
+
+        @Override
+        public IRecipeType<?> getType() {
             return null;
         }
     };
 
     private final World world;
     private final BlockPos centerPos;
-    private final EnumFacing.Axis axis;
+    private final Direction.Axis axis;
     private final BlockPos targetPos;
-    private final EnumFacing targetSide;
-    private final EnumFacing inputSide;
+    private final Direction targetSide;
+    private final Direction inputSide;
 
-    public WorldCraftingMatrix(World world, BlockPos centerPos, EnumFacing.Axis axis, BlockPos targetPos, EnumFacing inputSide) {
+    public WorldCraftingMatrix(World world, BlockPos centerPos, Direction.Axis axis, BlockPos targetPos, Direction inputSide) {
         this.world = world;
         this.centerPos = centerPos;
         this.axis = axis;
@@ -102,12 +107,12 @@ public class WorldCraftingMatrix {
         this.inputSide = inputSide;
     }
 
-    protected BlockPos addInAxis(BlockPos pos, EnumFacing.Axis axis, int i, int j) {
-        if(axis == EnumFacing.Axis.X) {
+    protected BlockPos addInAxis(BlockPos pos, Direction.Axis axis, int i, int j) {
+        if(axis == Direction.Axis.X) {
             return pos.add(0, j, i);
-        } else if(axis == EnumFacing.Axis.Y) {
+        } else if(axis == Direction.Axis.Y) {
             return pos.add(i, 0, j);
-        } else if(axis == EnumFacing.Axis.Z) {
+        } else if(axis == Direction.Axis.Z) {
             return pos.add(i, j, 0);
         }
         return null;
@@ -118,7 +123,7 @@ public class WorldCraftingMatrix {
                 getRegistry(IItemStackProviderRegistry.class).getProviders();
     }
 
-    protected Map<ItemStack, IItemStackProvider> determineItemStackProviderForInput(World world, BlockPos pos, EnumFacing side) {
+    protected Map<ItemStack, IItemStackProvider> determineItemStackProviderForInput(World world, BlockPos pos, Direction side) {
         Map<ItemStack, IItemStackProvider> providers = Maps.newHashMap();
         for(IItemStackProvider provider : getItemStackProviders()) {
             if(provider.canProvideInput() && provider.hasItemStack(world, pos, side)) {
@@ -128,7 +133,7 @@ public class WorldCraftingMatrix {
         return providers;
     }
 
-    protected boolean addItemStackForOutput(World world, BlockPos pos, EnumFacing side, List<IItemStackProvider> outputProviders, ItemStack itemStack, boolean simulate) {
+    protected boolean addItemStackForOutput(World world, BlockPos pos, Direction side, List<IItemStackProvider> outputProviders, ItemStack itemStack, boolean simulate) {
         for(IItemStackProvider provider : outputProviders) {
             if(provider.canHandleOutput() && provider.addItemStack(world, pos, side, itemStack, simulate)) {
                 return true;
@@ -212,7 +217,7 @@ public class WorldCraftingMatrix {
     }
 
     public static WorldCraftingMatrix deriveMatrix(World world, BlockPos centerPos) {
-        EnumFacing side = (world.getBlockState(centerPos).getValue(BlockStructuredCrafter.FACING)).getOpposite();
+        Direction side = (world.getBlockState(centerPos).get(BlockStructuredCrafter.FACING)).getOpposite();
         return new WorldCraftingMatrix(world, centerPos.offset(side), side.getAxis(),
                 centerPos.offset(side.getOpposite()), side.getOpposite());
     }
@@ -250,7 +255,7 @@ public class WorldCraftingMatrix {
 
         protected IRecipe getRecipe(World world) {
             try {
-                IRecipe recipe = CACHE_RECIPES.get(Pair.of(inventoryCrafting, world.provider.getDimension()));
+                IRecipe recipe = CACHE_RECIPES.get(Pair.of(inventoryCrafting, world.getDimension().getType()));
                 if (recipe == NULL_RECIPE) {
                     recipe = null;
                 }
@@ -274,7 +279,7 @@ public class WorldCraftingMatrix {
          * @param inputSide The crafting side.
          * @param simulate If the crafting should be simulated.
          */
-        public void handleRemainingItems(World world, EnumFacing inputSide, boolean simulate) {
+        public void handleRemainingItems(World world, Direction inputSide, boolean simulate) {
             IRecipe recipe = getRecipe(world);
             NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(inventoryCrafting);
             for(int i = 0; i < remainingStacks.size(); i++) {
