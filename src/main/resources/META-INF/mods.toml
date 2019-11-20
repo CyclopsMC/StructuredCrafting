@@ -14,7 +14,7 @@ Craft stuff in your world, automatically.
 [[dependencies.structuredcrafting]]
     modId="cyclopscore"
     mandatory=true
-    versionRange="[1.5.3,)"
+    versionRange="[1.6.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.structuredcrafting]]
