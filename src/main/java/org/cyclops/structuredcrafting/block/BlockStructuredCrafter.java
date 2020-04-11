@@ -9,6 +9,7 @@ import net.minecraft.item.Items;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -47,11 +48,12 @@ public class BlockStructuredCrafter extends BlockTile {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
-                                    BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
+                                             BlockRayTraceResult hit) {
         ItemStack heldItem = player.getHeldItem(hand);
         if(player != null && !heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
             worldIn.setBlockState(pos, state.with(FACING, hit.getFace().getOpposite()));
+            return ActionResultType.SUCCESS;
         }
         return super.onBlockActivated(state, worldIn, pos, player, hand, hit);
     }

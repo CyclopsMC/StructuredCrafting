@@ -14,18 +14,18 @@ Craft stuff in your world, automatically.
 [[dependencies.structuredcrafting]]
     modId="cyclopscore"
     mandatory=true
-    versionRange="[1.6.0,)"
+    versionRange="[1.6.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.structuredcrafting]]
     modId="forge"
     mandatory=true
-    versionRange="[28.1,)"
+    versionRange="[31.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.structuredcrafting]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"

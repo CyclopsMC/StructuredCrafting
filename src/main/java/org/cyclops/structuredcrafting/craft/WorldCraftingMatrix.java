@@ -1,28 +1,17 @@
 package org.cyclops.structuredcrafting.craft;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.util.concurrent.UncheckedExecutionException;
 import lombok.ToString;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Level;
+import org.cyclops.cyclopscore.helper.CraftingHelpers;
 import org.cyclops.structuredcrafting.StructuredCrafting;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProvider;
@@ -30,66 +19,12 @@ import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A crafting matrix represented with blockstates.
  * @author rubensworks
  */
 public class WorldCraftingMatrix {
-
-    private static final LoadingCache<Pair<WorldInventoryCrafting, DimensionType>, IRecipe> CACHE_RECIPES = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<Pair<WorldInventoryCrafting, DimensionType>, IRecipe>() {
-                @Override
-                public IRecipe load(Pair<WorldInventoryCrafting, DimensionType> key) throws Exception {
-                    ServerWorld world = DimensionManager.getWorld(ServerLifecycleHooks.getCurrentServer(), key.getRight(), false, false);
-                    IRecipe recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, key.getLeft(), world).orElse(null);
-
-                    if (recipe == null) {
-                        recipe = NULL_RECIPE;
-                    }
-                    return recipe;
-                }
-            });
-    // A dummy recipe that represents null, because guava's cache doesn't allow null entries.
-    private static final IRecipe NULL_RECIPE = new IRecipe() {
-
-        @Override
-        public boolean matches(IInventory inv, World worldIn) {
-            return false;
-        }
-
-        @Override
-        public ItemStack getCraftingResult(IInventory inv) {
-            return null;
-        }
-
-        @Override
-        public boolean canFit(int width, int height) {
-            return false;
-        }
-
-        @Override
-        public ItemStack getRecipeOutput() {
-            return null;
-        }
-
-        @Override
-        public ResourceLocation getId() {
-            return null;
-        }
-
-        @Override
-        public IRecipeSerializer<?> getSerializer() {
-            return null;
-        }
-
-        @Override
-        public IRecipeType<?> getType() {
-            return null;
-        }
-    };
 
     private final World world;
     private final BlockPos centerPos;
@@ -254,15 +189,7 @@ public class WorldCraftingMatrix {
         }
 
         protected IRecipe getRecipe(World world) {
-            try {
-                IRecipe recipe = CACHE_RECIPES.get(Pair.of(inventoryCrafting, world.getDimension().getType()));
-                if (recipe == NULL_RECIPE) {
-                    recipe = null;
-                }
-                return recipe;
-            } catch (ExecutionException | UncheckedExecutionException e) {
-                return null;
-            }
+            return CraftingHelpers.findRecipeCached(IRecipeType.CRAFTING, inventoryCrafting, world, true).orElse(null);
         }
 
         public ItemStack getOutput(World world) {
