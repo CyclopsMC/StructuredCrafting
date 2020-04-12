@@ -10,10 +10,10 @@
       "item": "minecraft:stick"
     },
     "C": {
-      "tag": "cobblestone"
+      "tag": "forge:cobblestone"
     },
     "I": {
-      "tag": "ingots/iron"
+      "tag": "forge:ingots/iron"
     },
     "R": {
       "item": "minecraft:crafting_table"
