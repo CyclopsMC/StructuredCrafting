@@ -9,6 +9,7 @@ authors="rubensworks (aka kroeser)"
 modId="structuredcrafting"
 version="${file.jarVersion}"
 displayName="StructuredCrafting"
+updateJSONURL="https://raw.githubusercontent.com/CyclopsMC/Versions/master/forge_update/structured-crafting.json"
 description='''
 Craft stuff in your world, automatically.
 '''
