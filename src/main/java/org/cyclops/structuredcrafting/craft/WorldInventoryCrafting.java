@@ -17,14 +17,14 @@ public class WorldInventoryCrafting extends CraftingInventory {
     public WorldInventoryCrafting() {
         super(new Container(ContainerType.CRAFTING, 0) {
             @Override
-            public boolean canInteractWith(PlayerEntity playerIn) {
+            public boolean stillValid(PlayerEntity playerIn) {
                 return false;
             }
         }, 3, 3);
     }
 
     public void setItemStack(int row, int col, ItemStack itemStack) {
-        setInventorySlotContents(col * 3 + row, itemStack.copy());
+        setItem(col * 3 + row, itemStack.copy());
     }
 
     @Override
@@ -32,8 +32,8 @@ public class WorldInventoryCrafting extends CraftingInventory {
         if (!(obj instanceof WorldInventoryCrafting)) {
             return false;
         }
-        for (int i = 0; i < getSizeInventory(); i++) {
-            if (!ItemStack.areItemStacksEqual(this.getStackInSlot(i), ((WorldInventoryCrafting) obj).getStackInSlot(i))) {
+        for (int i = 0; i < getContainerSize(); i++) {
+            if (!ItemStack.matches(this.getItem(i), ((WorldInventoryCrafting) obj).getItem(i))) {
                 return false;
             }
         }
@@ -42,10 +42,10 @@ public class WorldInventoryCrafting extends CraftingInventory {
 
     @Override
     public int hashCode() {
-        int hash = 11 + getSizeInventory();
-        for (int i = 0; i < getSizeInventory(); i++) {
+        int hash = 11 + getContainerSize();
+        for (int i = 0; i < getContainerSize(); i++) {
             hash = hash << 1;
-            hash |= getItemStackHashCode(getStackInSlot(i));
+            hash |= getItemStackHashCode(getItem(i));
         }
         return hash;
     }
@@ -54,15 +54,15 @@ public class WorldInventoryCrafting extends CraftingInventory {
         if (itemStack == null) {
             return 0;
         }
-        return Objects.hashCode(itemStack.getCount(), Item.getIdFromItem(itemStack.getItem()),
+        return Objects.hashCode(itemStack.getCount(), Item.getId(itemStack.getItem()),
                 itemStack.hasTag() ? itemStack.getTag() : 0);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < this.getSizeInventory(); i++) {
-            sb.append(this.getStackInSlot(i));
+        for (int i = 0; i < this.getContainerSize(); i++) {
+            sb.append(this.getItem(i));
             sb.append(",");
         }
         return sb.toString();

@@ -19,8 +19,8 @@ import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
 public class InventoryItemStackProvider implements IItemStackProvider {
 
     protected Pair<Integer, ItemStack> getFirstItem(IInventory inventory, Direction side) {
-        for(int slot = 0; slot < inventory.getSizeInventory(); slot++) {
-            ItemStack itemStack = inventory.getStackInSlot(slot);
+        for(int slot = 0; slot < inventory.getContainerSize(); slot++) {
+            ItemStack itemStack = inventory.getItem(slot);
             if(!itemStack.isEmpty()) {
                 return Pair.of(slot, itemStack);
             }
@@ -91,7 +91,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
                 newItemStack = ItemStack.EMPTY;
             }
             if(!simulate) {
-                inventory.setInventorySlotContents(result.getLeft(), newItemStack);
+                inventory.setItem(result.getLeft(), newItemStack);
             }
         }
     }
@@ -107,7 +107,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
             }
         } else {
             IInventory inventory = TileHelpers.getSafeTile(world, pos, IInventory.class).orElse(null);
-            for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
+            for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
                 if (InventoryHelpers.addToSlot(inventory, slot, itemStack, simulate)) {
                     return true;
                 }
@@ -130,7 +130,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
             Pair<Integer, ItemStack> result = getFirstItem(inventory, side);
             if (result != null) {
                 if(!simulate) {
-                    inventory.setInventorySlotContents(result.getLeft(), itemStack);
+                    inventory.setItem(result.getLeft(), itemStack);
                 }
                 return true;
             }

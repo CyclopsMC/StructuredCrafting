@@ -49,8 +49,8 @@ public class BlockStructuredCrafterConfig extends BlockConfig {
         super(
                 StructuredCrafting._instance,
                 "structured_crafter",
-                (eConfig) -> new BlockStructuredCrafter(Block.Properties.create(Material.ROCK)
-                        .hardnessAndResistance(2.0f)),
+                (eConfig) -> new BlockStructuredCrafter(Block.Properties.of(Material.STONE)
+                        .strength(2.0f)),
                 getDefaultItemConstructor(StructuredCrafting._instance)
         );
     }

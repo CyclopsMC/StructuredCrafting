@@ -31,31 +31,31 @@ public class BlockStructuredCrafter extends BlockTile {
     public BlockStructuredCrafter(Block.Properties properties) {
         super(properties, TileStructuredCrafter::new);
 
-        this.setDefaultState(this.stateContainer.getBaseState()
-                .with(FACING, Direction.DOWN));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.DOWN));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState()
-                .with(FACING, context.getFace().getOpposite());
+        return this.defaultBlockState()
+                .setValue(FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
                                              BlockRayTraceResult hit) {
-        ItemStack heldItem = player.getHeldItem(hand);
+        ItemStack heldItem = player.getItemInHand(hand);
         if(player != null && !heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
-            worldIn.setBlockState(pos, state.with(FACING, hit.getFace().getOpposite()));
+            worldIn.setBlockAndUpdate(pos, state.setValue(FACING, hit.getDirection().getOpposite()));
             return ActionResultType.SUCCESS;
         }
-        return super.onBlockActivated(state, worldIn, pos, player, hand, hit);
+        return super.use(state, worldIn, pos, player, hand, hit);
     }
 
 }

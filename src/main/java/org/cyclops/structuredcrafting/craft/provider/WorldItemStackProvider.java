@@ -30,7 +30,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
 
     @Override
     public boolean isValidForResults(World world, BlockPos pos, Direction side) {
-        return world.isAirBlock(pos);
+        return world.isEmptyBlock(pos);
     }
 
     protected boolean hasEmptyItemHandler(World world, BlockPos pos, Direction side) {
@@ -49,7 +49,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
 
     @Override
     public boolean hasItemStack(World world, BlockPos pos, Direction side) {
-        return !world.isAirBlock(pos) && hasEmptyItemHandler(world, pos, side);
+        return !world.isEmptyBlock(pos) && hasEmptyItemHandler(world, pos, side);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
 
         ItemStack itemStack = ItemStack.EMPTY;
         if(blockState != null) {
-            Item item = Item.getItemFromBlock(blockState.getBlock());
+            Item item = Item.byBlock(blockState.getBlock());
             if(item != null && hasEmptyItemHandler(world, pos, side)) {
                 itemStack = new ItemStack(item, 1);
             }
@@ -81,7 +81,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
     @Override
     public boolean setItemStack(World world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate) {
         if(!simulate && itemStack.getItem() instanceof BlockItem) {
-            world.setBlockState(pos, ((BlockItem) itemStack.getItem()).getBlock().getDefaultState());
+            world.setBlockAndUpdate(pos, ((BlockItem) itemStack.getItem()).getBlock().defaultBlockState());
             itemStack.shrink(1);
         }
         if(!simulate && itemStack.getCount() > 0) {

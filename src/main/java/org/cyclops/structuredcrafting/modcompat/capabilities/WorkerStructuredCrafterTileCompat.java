@@ -43,7 +43,7 @@ public class WorkerStructuredCrafterTileCompat extends SimpleCapabilityConstruct
 
         @Override
         public boolean canWork() {
-            return provider.getWorld().isBlockPowered(provider.getPos());
+            return provider.getLevel().hasNeighborSignal(provider.getBlockPos());
         }
     }
 }

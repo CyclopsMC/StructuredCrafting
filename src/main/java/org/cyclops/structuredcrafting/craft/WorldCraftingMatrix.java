@@ -44,11 +44,11 @@ public class WorldCraftingMatrix {
 
     protected BlockPos addInAxis(BlockPos pos, Direction.Axis axis, int i, int j) {
         if(axis == Direction.Axis.X) {
-            return pos.add(0, j, i);
+            return pos.offset(0, j, i);
         } else if(axis == Direction.Axis.Y) {
-            return pos.add(i, 0, j);
+            return pos.offset(i, 0, j);
         } else if(axis == Direction.Axis.Z) {
-            return pos.add(i, j, 0);
+            return pos.offset(i, j, 0);
         }
         return null;
     }
@@ -152,9 +152,9 @@ public class WorldCraftingMatrix {
     }
 
     public static WorldCraftingMatrix deriveMatrix(World world, BlockPos centerPos) {
-        Direction side = (world.getBlockState(centerPos).get(BlockStructuredCrafter.FACING)).getOpposite();
-        return new WorldCraftingMatrix(world, centerPos.offset(side), side.getAxis(),
-                centerPos.offset(side.getOpposite()), side.getOpposite());
+        Direction side = (world.getBlockState(centerPos).getValue(BlockStructuredCrafter.FACING)).getOpposite();
+        return new WorldCraftingMatrix(world, centerPos.relative(side), side.getAxis(),
+                centerPos.relative(side.getOpposite()), side.getOpposite());
     }
 
     @ToString
@@ -195,7 +195,7 @@ public class WorldCraftingMatrix {
         public ItemStack getOutput(World world) {
             IRecipe recipe = getRecipe(world);
             if (recipe != null) {
-                return recipe.getCraftingResult(inventoryCrafting);
+                return recipe.assemble(inventoryCrafting);
             }
             return ItemStack.EMPTY;
         }
@@ -210,7 +210,7 @@ public class WorldCraftingMatrix {
             IRecipe recipe = getRecipe(world);
             NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(inventoryCrafting);
             for(int i = 0; i < remainingStacks.size(); i++) {
-                ItemStack originalStack = inventoryCrafting.getStackInSlot(i);
+                ItemStack originalStack = inventoryCrafting.getItem(i);
                 ItemStack remainingStack = remainingStacks.get(i);
                 if(originalStack != null && !originalStack.isEmpty()) {
                     if (providers[i] != null) {
@@ -228,8 +228,8 @@ public class WorldCraftingMatrix {
 
         public CraftingPossibility clone() {
             CraftingPossibility craftingPossibility = new CraftingPossibility();
-            for (int i = 0; i < this.inventoryCrafting.getSizeInventory(); i++) {
-                craftingPossibility.inventoryCrafting.setInventorySlotContents(i, this.inventoryCrafting.getStackInSlot(i));
+            for (int i = 0; i < this.inventoryCrafting.getContainerSize(); i++) {
+                craftingPossibility.inventoryCrafting.setItem(i, this.inventoryCrafting.getItem(i));
             }
             System.arraycopy(this.positions, 0, craftingPossibility.positions, 0, this.positions.length);
             System.arraycopy(this.providers, 0, craftingPossibility.providers, 0, this.providers.length);

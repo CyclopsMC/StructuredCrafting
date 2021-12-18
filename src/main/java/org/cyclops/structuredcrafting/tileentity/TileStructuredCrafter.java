@@ -5,6 +5,9 @@ import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
 import org.cyclops.structuredcrafting.RegistryEntries;
 import org.cyclops.structuredcrafting.craft.WorldCraftingMatrix;
 
+import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity.ITickingTile;
+import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity.TickingTileComponent;
+
 /**
  * A ticking tile entity for the structured crafter.
  * @author rubensworks
@@ -27,7 +30,7 @@ public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsT
 
     public WorldCraftingMatrix getMatrix() {
         if(matrix == null) {
-            matrix = WorldCraftingMatrix.deriveMatrix(world, pos);
+            matrix = WorldCraftingMatrix.deriveMatrix(level, worldPosition);
         }
         return matrix;
     }
@@ -35,8 +38,8 @@ public class TileStructuredCrafter extends CyclopsTileEntity implements CyclopsT
     @Override
     protected void updateTileEntity() {
         tickOffset = (tickOffset + 1) % SPEED;
-        if(!world.isRemote && tickOffset == 0) {
-            if(world.isBlockPowered(getPos())) {
+        if(!level.isClientSide && tickOffset == 0) {
+            if(level.hasNeighborSignal(getBlockPos())) {
                 getMatrix().craft(false);
             } else {
                 matrix = null;
