@@ -29,7 +29,7 @@ public class GeneralConfig extends DummyConfig {
     public GeneralConfig() {
         super(StructuredCrafting._instance, "general");
     }
-    
+
     @Override
     public void onRegistered() {
         getMod().putGenericReference(ModBase.REFKEY_CRASH_ON_INVALID_RECIPE, GeneralConfig.crashOnInvalidRecipe);
