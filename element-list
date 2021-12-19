@@ -1,6 +1,6 @@
 org.cyclops.structuredcrafting
 org.cyclops.structuredcrafting.block
+org.cyclops.structuredcrafting.blockentity
 org.cyclops.structuredcrafting.craft
 org.cyclops.structuredcrafting.craft.provider
 org.cyclops.structuredcrafting.modcompat.capabilities
-org.cyclops.structuredcrafting.tileentity
