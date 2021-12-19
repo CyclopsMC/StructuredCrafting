@@ -1,10 +1,10 @@
 package org.cyclops.structuredcrafting;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.ObjectHolder;
-import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafter;
+import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
 
 /**
  * Referenced registry entries.
@@ -19,6 +19,6 @@ public class RegistryEntries {
     public static final Block BLOCK_STRUCTURED_CRAFTER = null;
 
     @ObjectHolder("structuredcrafting:structured_crafter")
-    public static final TileEntityType<TileStructuredCrafter> TILE_STRUCTURED_CRAFTER = null;
+    public static final BlockEntityType<BlockEntityStructuredCrafter> BLOCK_ENTITY_STRUCTURED_CRAFTER = null;
 
 }

@@ -1,23 +1,23 @@
 package org.cyclops.structuredcrafting.craft;
 
 import com.google.common.base.Objects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * A world-based implementation of the crafting container.
  * @author rubensworks
  */
-public class WorldInventoryCrafting extends CraftingInventory {
+public class WorldInventoryCrafting extends CraftingContainer {
 
     public WorldInventoryCrafting() {
-        super(new Container(ContainerType.CRAFTING, 0) {
+        super(new AbstractContainerMenu(MenuType.CRAFTING, 0) {
             @Override
-            public boolean stillValid(PlayerEntity playerIn) {
+            public boolean stillValid(Player playerIn) {
                 return false;
             }
         }, 3, 3);

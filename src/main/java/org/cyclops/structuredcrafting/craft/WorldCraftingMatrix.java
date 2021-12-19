@@ -3,14 +3,13 @@ package org.cyclops.structuredcrafting.craft;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.ToString;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.apache.logging.log4j.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import org.cyclops.cyclopscore.helper.CraftingHelpers;
 import org.cyclops.structuredcrafting.StructuredCrafting;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
@@ -26,15 +25,15 @@ import java.util.Map;
  */
 public class WorldCraftingMatrix {
 
-    private final World world;
+    private final Level level;
     private final BlockPos centerPos;
     private final Direction.Axis axis;
     private final BlockPos targetPos;
     private final Direction targetSide;
     private final Direction inputSide;
 
-    public WorldCraftingMatrix(World world, BlockPos centerPos, Direction.Axis axis, BlockPos targetPos, Direction inputSide) {
-        this.world = world;
+    public WorldCraftingMatrix(Level level, BlockPos centerPos, Direction.Axis axis, BlockPos targetPos, Direction inputSide) {
+        this.level = level;
         this.centerPos = centerPos;
         this.axis = axis;
         this.targetPos = targetPos;
@@ -58,19 +57,19 @@ public class WorldCraftingMatrix {
                 getRegistry(IItemStackProviderRegistry.class).getProviders();
     }
 
-    protected Map<ItemStack, IItemStackProvider> determineItemStackProviderForInput(World world, BlockPos pos, Direction side) {
+    protected Map<ItemStack, IItemStackProvider> determineItemStackProviderForInput(Level level, BlockPos pos, Direction side) {
         Map<ItemStack, IItemStackProvider> providers = Maps.newHashMap();
         for(IItemStackProvider provider : getItemStackProviders()) {
-            if(provider.canProvideInput() && provider.hasItemStack(world, pos, side)) {
-                providers.put(provider.getItemStack(world, pos, side), provider);
+            if(provider.canProvideInput() && provider.hasItemStack(level, pos, side)) {
+                providers.put(provider.getItemStack(level, pos, side), provider);
             }
         }
         return providers;
     }
 
-    protected boolean addItemStackForOutput(World world, BlockPos pos, Direction side, List<IItemStackProvider> outputProviders, ItemStack itemStack, boolean simulate) {
+    protected boolean addItemStackForOutput(Level level, BlockPos pos, Direction side, List<IItemStackProvider> outputProviders, ItemStack itemStack, boolean simulate) {
         for(IItemStackProvider provider : outputProviders) {
-            if(provider.canHandleOutput() && provider.addItemStack(world, pos, side, itemStack, simulate)) {
+            if(provider.canHandleOutput() && provider.addItemStack(level, pos, side, itemStack, simulate)) {
                 return true;
             }
         }
@@ -81,7 +80,7 @@ public class WorldCraftingMatrix {
         // Check if at least one of the providers can write to the output target.
         List<IItemStackProvider> outputProviders = Lists.newLinkedList();
         for(IItemStackProvider provider : getItemStackProviders()) {
-            if(provider.isValidForResults(world, targetPos, targetSide)) {
+            if(provider.isValidForResults(level, targetPos, targetSide)) {
                 outputProviders.add(provider);
             }
         }
@@ -98,7 +97,7 @@ public class WorldCraftingMatrix {
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {
                         BlockPos pos = addInAxis(centerPos, axis, i, j);
-                        Map<ItemStack, IItemStackProvider> results = determineItemStackProviderForInput(world, pos, inputSide);
+                        Map<ItemStack, IItemStackProvider> results = determineItemStackProviderForInput(level, pos, inputSide);
                         boolean processedSingleResult = false;
                         List<CraftingPossibility> possibilitiesAtStart = Lists.newArrayList(possibilities);
                         for (Map.Entry<ItemStack, IItemStackProvider> result : results.entrySet()) {
@@ -134,7 +133,7 @@ public class WorldCraftingMatrix {
                     }
                 }
                 for (CraftingPossibility possibility : possibilities) {
-                    if (!(itemStack = possibility.getOutput(world)).isEmpty()) {
+                    if (!(itemStack = possibility.getOutput(level)).isEmpty()) {
                         chosenPossibility = possibility;
                         break;
                     }
@@ -144,16 +143,16 @@ public class WorldCraftingMatrix {
 
         // Determine output
         if(chosenPossibility != null && !itemStack.isEmpty()
-                && addItemStackForOutput(world, targetPos, targetSide, outputProviders, itemStack, simulate)) {
-            chosenPossibility.handleRemainingItems(world, inputSide, simulate);
+                && addItemStackForOutput(level, targetPos, targetSide, outputProviders, itemStack, simulate)) {
+            chosenPossibility.handleRemainingItems(level, inputSide, simulate);
             return true;
         }
         return false;
     }
 
-    public static WorldCraftingMatrix deriveMatrix(World world, BlockPos centerPos) {
-        Direction side = (world.getBlockState(centerPos).getValue(BlockStructuredCrafter.FACING)).getOpposite();
-        return new WorldCraftingMatrix(world, centerPos.relative(side), side.getAxis(),
+    public static WorldCraftingMatrix deriveMatrix(Level level, BlockPos centerPos) {
+        Direction side = (level.getBlockState(centerPos).getValue(BlockStructuredCrafter.FACING)).getOpposite();
+        return new WorldCraftingMatrix(level, centerPos.relative(side), side.getAxis(),
                 centerPos.relative(side.getOpposite()), side.getOpposite());
     }
 
@@ -188,12 +187,12 @@ public class WorldCraftingMatrix {
             providers[arrayIndex] = itemStackProvider;
         }
 
-        protected IRecipe getRecipe(World world) {
-            return CraftingHelpers.findRecipeCached(IRecipeType.CRAFTING, inventoryCrafting, world, true).orElse(null);
+        protected Recipe getRecipe(Level level) {
+            return CraftingHelpers.findRecipeCached(RecipeType.CRAFTING, inventoryCrafting, level, true).orElse(null);
         }
 
-        public ItemStack getOutput(World world) {
-            IRecipe recipe = getRecipe(world);
+        public ItemStack getOutput(Level level) {
+            Recipe recipe = getRecipe(level);
             if (recipe != null) {
                 return recipe.assemble(inventoryCrafting);
             }
@@ -202,24 +201,24 @@ public class WorldCraftingMatrix {
 
         /**
          * Handle remaining container items: place blocks and drop items
-         * @param world The world.
+         * @param level The level.
          * @param inputSide The crafting side.
          * @param simulate If the crafting should be simulated.
          */
-        public void handleRemainingItems(World world, Direction inputSide, boolean simulate) {
-            IRecipe recipe = getRecipe(world);
+        public void handleRemainingItems(Level level, Direction inputSide, boolean simulate) {
+            Recipe recipe = getRecipe(level);
             NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(inventoryCrafting);
             for(int i = 0; i < remainingStacks.size(); i++) {
                 ItemStack originalStack = inventoryCrafting.getItem(i);
                 ItemStack remainingStack = remainingStacks.get(i);
                 if(originalStack != null && !originalStack.isEmpty()) {
                     if (providers[i] != null) {
-                        providers[i].reduceItemStack(world, positions[i], inputSide, simulate);
+                        providers[i].reduceItemStack(level, positions[i], inputSide, simulate);
                         if (!remainingStack.isEmpty() && remainingStack.getCount() > 0) {
-                            providers[i].addItemStack(world, positions[i], inputSide, remainingStack, simulate);
+                            providers[i].addItemStack(level, positions[i], inputSide, remainingStack, simulate);
                         }
                     } else {
-                        StructuredCrafting.clog(Level.WARN, "The structured crafting provider for position "
+                        StructuredCrafting.clog(org.apache.logging.log4j.Level.WARN, "The structured crafting provider for position "
                                 + i + " did not exist for stack " + originalStack);
                     }
                 }

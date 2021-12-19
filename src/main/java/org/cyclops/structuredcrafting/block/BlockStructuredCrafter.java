@@ -1,22 +1,26 @@
 package org.cyclops.structuredcrafting.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
-import org.cyclops.cyclopscore.block.BlockTile;
-import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafter;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import org.cyclops.cyclopscore.block.BlockWithEntity;
+import org.cyclops.structuredcrafting.RegistryEntries;
+import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
 
 import javax.annotation.Nullable;
 
@@ -24,36 +28,42 @@ import javax.annotation.Nullable;
  * This block will detect neighbour block updates and will try to craft a new block/item from them.
  * @author rubensworks
  */
-public class BlockStructuredCrafter extends BlockTile {
+public class BlockStructuredCrafter extends BlockWithEntity {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BlockStructuredCrafter(Block.Properties properties) {
-        super(properties, TileStructuredCrafter::new);
+        super(properties, BlockEntityStructuredCrafter::new);
 
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.DOWN));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER, new BlockEntityStructuredCrafter.Ticker());
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
                 .setValue(FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
-                                             BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand,
+                                             BlockHitResult hit) {
         ItemStack heldItem = player.getItemInHand(hand);
         if(player != null && !heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
             worldIn.setBlockAndUpdate(pos, state.setValue(FACING, hit.getDirection().getOpposite()));
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.use(state, worldIn, pos, player, hand, hit);
     }

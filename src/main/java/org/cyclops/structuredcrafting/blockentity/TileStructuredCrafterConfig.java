@@ -1,23 +1,23 @@
-package org.cyclops.structuredcrafting.tileentity;
+package org.cyclops.structuredcrafting.blockentity;
 
 import com.google.common.collect.Sets;
-import net.minecraft.tileentity.TileEntityType;
-import org.cyclops.cyclopscore.config.extendedconfig.TileEntityConfig;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
 import org.cyclops.structuredcrafting.RegistryEntries;
 import org.cyclops.structuredcrafting.StructuredCrafting;
 
 /**
- * Config for the {@link TileStructuredCrafter}.
+ * Config for the {@link BlockEntityStructuredCrafter}.
  * @author rubensworks
  *
  */
-public class TileStructuredCrafterConfig extends TileEntityConfig<TileStructuredCrafter> {
+public class TileStructuredCrafterConfig extends BlockEntityConfig<BlockEntityStructuredCrafter> {
 
     public TileStructuredCrafterConfig() {
         super(
                 StructuredCrafting._instance,
                 "structured_crafter",
-                (eConfig) -> new TileEntityType<>(TileStructuredCrafter::new,
+                (eConfig) -> new BlockEntityType<>(BlockEntityStructuredCrafter::new,
                         Sets.newHashSet(RegistryEntries.BLOCK_STRUCTURED_CRAFTER), null)
         );
     }

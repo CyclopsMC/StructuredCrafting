@@ -1,6 +1,6 @@
 package org.cyclops.structuredcrafting;
 
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.Level;
@@ -11,13 +11,13 @@ import org.cyclops.cyclopscore.modcompat.ModCompatLoader;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
+import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
+import org.cyclops.structuredcrafting.blockentity.TileStructuredCrafterConfig;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.InventoryItemStackProvider;
 import org.cyclops.structuredcrafting.craft.provider.ItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.WorldItemStackProvider;
 import org.cyclops.structuredcrafting.modcompat.capabilities.WorkerStructuredCrafterTileCompat;
-import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafter;
-import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafterConfig;
 
 /**
  * The main mod class of StructuredCrafting.
@@ -41,7 +41,7 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
         super.loadModCompats(modCompatLoader);
 
         // Capabilities
-        getCapabilityConstructorRegistry().registerTile(TileStructuredCrafter.class, new WorkerStructuredCrafterTileCompat());
+        getCapabilityConstructorRegistry().registerTile(BlockEntityStructuredCrafter.class, new WorkerStructuredCrafterTileCompat());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
     }
 
     @Override
-    protected ItemGroup constructDefaultItemGroup() {
+    protected CreativeModeTab constructDefaultCreativeModeTab() {
         return new ItemGroupMod(this, () -> RegistryEntries.ITEM_STRUCTURED_CRAFTER);
     }
 

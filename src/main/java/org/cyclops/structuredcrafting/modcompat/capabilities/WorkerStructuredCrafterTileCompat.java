@@ -6,7 +6,7 @@ import org.cyclops.commoncapabilities.api.capability.work.IWorker;
 import org.cyclops.cyclopscore.modcompat.capabilities.DefaultCapabilityProvider;
 import org.cyclops.cyclopscore.modcompat.capabilities.SimpleCapabilityConstructor;
 import org.cyclops.structuredcrafting.Capabilities;
-import org.cyclops.structuredcrafting.tileentity.TileStructuredCrafter;
+import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
 
 import javax.annotation.Nullable;
 
@@ -14,11 +14,11 @@ import javax.annotation.Nullable;
  * Compatibility for structured crafter worker capability.
  * @author rubensworks
  */
-public class WorkerStructuredCrafterTileCompat extends SimpleCapabilityConstructor<IWorker, TileStructuredCrafter> {
+public class WorkerStructuredCrafterTileCompat extends SimpleCapabilityConstructor<IWorker, BlockEntityStructuredCrafter> {
 
     @Nullable
     @Override
-    public ICapabilityProvider createProvider(TileStructuredCrafter host) {
+    public ICapabilityProvider createProvider(BlockEntityStructuredCrafter host) {
         return new DefaultCapabilityProvider<>(Capabilities.WORKER, new Worker(host));
     }
 
@@ -29,9 +29,9 @@ public class WorkerStructuredCrafterTileCompat extends SimpleCapabilityConstruct
 
     public static class Worker implements IWorker {
 
-        private final TileStructuredCrafter provider;
+        private final BlockEntityStructuredCrafter provider;
 
-        public Worker(TileStructuredCrafter provider) {
+        public Worker(BlockEntityStructuredCrafter provider) {
             this.provider = provider;
         }
 
