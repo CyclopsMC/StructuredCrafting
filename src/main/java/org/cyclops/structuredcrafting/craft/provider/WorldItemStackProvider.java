@@ -1,23 +1,44 @@
 package org.cyclops.structuredcrafting.craft.provider;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import org.cyclops.cyclopscore.helper.ItemStackHelpers;
 import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
+import org.cyclops.cyclopscore.helper.ItemStackHelpers;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
+
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 /**
  * World that can provide an itemstack.
  * @author rubensworks
  */
 public class WorldItemStackProvider implements IItemStackProvider {
+
+    private static GameProfile PROFILE = new GameProfile(UUID.fromString("41C82C87-7AfB-4024-BB57-13D2C99CAE78"), "[StructuredCrafting]");
+    private static final Map<ServerLevel, FakePlayer> FAKE_PLAYERS = new WeakHashMap<ServerLevel, FakePlayer>();
+
+    public static FakePlayer getFakePlayer(ServerLevel world) {
+        FakePlayer fakePlayer = FAKE_PLAYERS.get(world);
+        if (fakePlayer == null) {
+            fakePlayer = new FakePlayer(world, PROFILE);
+            FAKE_PLAYERS.put(world, fakePlayer);
+        }
+        return fakePlayer;
+    }
+
     @Override
     public boolean canProvideInput() {
         return BlockStructuredCrafterConfig.canTakeInputsFromWorld;
@@ -55,15 +76,10 @@ public class WorldItemStackProvider implements IItemStackProvider {
     @Override
     public ItemStack getItemStack(Level world, BlockPos pos, Direction side) {
         BlockState blockState = world.getBlockState(pos);
-
-        ItemStack itemStack = ItemStack.EMPTY;
-        if(blockState != null) {
-            Item item = Item.byBlock(blockState.getBlock());
-            if(item != null && hasEmptyItemHandler(world, pos, side)) {
-                itemStack = new ItemStack(item, 1);
-            }
+        if(blockState != null && hasEmptyItemHandler(world, pos, side)) {
+            return blockState.getCloneItemStack(new BlockHitResult(new Vec3(0, 0, 0), side, pos, false), world, pos, getFakePlayer((ServerLevel) world));
         }
-        return itemStack;
+        return ItemStack.EMPTY;
     }
 
     @Override
