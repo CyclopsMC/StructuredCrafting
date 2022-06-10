@@ -12,13 +12,13 @@ import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
  */
 public class RegistryEntries {
 
-    @ObjectHolder("structuredcrafting:structured_crafter")
+    @ObjectHolder(registryName = "item", value = "structuredcrafting:structured_crafter")
     public static final Item ITEM_STRUCTURED_CRAFTER = null;
 
-    @ObjectHolder("structuredcrafting:structured_crafter")
+    @ObjectHolder(registryName = "block", value = "structuredcrafting:structured_crafter")
     public static final Block BLOCK_STRUCTURED_CRAFTER = null;
 
-    @ObjectHolder("structuredcrafting:structured_crafter")
+    @ObjectHolder(registryName = "block_entity_type", value = "structuredcrafting:structured_crafter")
     public static final BlockEntityType<BlockEntityStructuredCrafter> BLOCK_ENTITY_STRUCTURED_CRAFTER = null;
 
 }

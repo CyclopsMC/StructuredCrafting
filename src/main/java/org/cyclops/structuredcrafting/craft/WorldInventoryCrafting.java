@@ -17,6 +17,11 @@ public class WorldInventoryCrafting extends CraftingContainer {
     public WorldInventoryCrafting() {
         super(new AbstractContainerMenu(MenuType.CRAFTING, 0) {
             @Override
+            public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
+                return ItemStack.EMPTY;
+            }
+
+            @Override
             public boolean stillValid(Player playerIn) {
                 return false;
             }
