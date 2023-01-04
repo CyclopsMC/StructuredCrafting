@@ -1,0 +1,20 @@
+{
+    "sources": [
+        {
+            "type": "minecraft:single",
+            "resource": "structuredcrafting:blocks/structured_crafter_down"
+        },
+        {
+            "type": "minecraft:single",
+            "resource": "structuredcrafting:blocks/structured_crafter_front"
+        },
+        {
+            "type": "minecraft:single",
+            "resource": "structuredcrafting:blocks/structured_crafter_side"
+        },
+        {
+            "type": "minecraft:single",
+            "resource": "structuredcrafting:blocks/structured_crafter_top"
+        }
+    ]
+}

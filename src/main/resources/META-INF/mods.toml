@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="[44,)"
 issueTrackerURL="https://github.com/CyclopsMC/StructuredCrafting/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/structured-crafting"
 license="MIT"
@@ -16,18 +16,18 @@ Craft stuff in your world, automatically.
 [[dependencies.structuredcrafting]]
     modId="cyclopscore"
     mandatory=true
-    versionRange="[1.17.0,)"
+    versionRange="[1.17.3,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.structuredcrafting]]
     modId="forge"
     mandatory=true
-    versionRange="[43.0.8,)"
+    versionRange="[44.1.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.structuredcrafting]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,]"
+    versionRange="[1.19.3,]"
     ordering="NONE"
     side="BOTH"
