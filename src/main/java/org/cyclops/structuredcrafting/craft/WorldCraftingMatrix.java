@@ -143,7 +143,10 @@ public class WorldCraftingMatrix {
 
         // Determine output
         if(chosenPossibility != null && !itemStack.isEmpty()
-                && addItemStackForOutput(level, targetPos, targetSide, outputProviders, itemStack, simulate)) {
+                && addItemStackForOutput(level, targetPos, targetSide, outputProviders, itemStack, true)) {
+            if (!simulate) {
+                addItemStackForOutput(level, targetPos, targetSide, outputProviders, itemStack, simulate);
+            }
             chosenPossibility.handleRemainingItems(level, inputSide, simulate);
             return true;
         }
