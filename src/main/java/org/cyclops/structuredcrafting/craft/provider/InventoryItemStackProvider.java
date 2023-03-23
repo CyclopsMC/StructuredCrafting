@@ -1,15 +1,15 @@
 package org.cyclops.structuredcrafting.craft.provider;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
-import org.cyclops.cyclopscore.helper.InventoryHelpers;
 import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
+import org.cyclops.cyclopscore.helper.InventoryHelpers;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
 
 /**
@@ -50,7 +50,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
 
     @Override
     public boolean isValidForResults(Level world, BlockPos pos, Direction side) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, ForgeCapabilities.ITEM_HANDLER).orElse(null);
         Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
         return itemHandler != null || inventory != null;
     }
@@ -58,13 +58,13 @@ public class InventoryItemStackProvider implements IItemStackProvider {
     @Override
     public boolean hasItemStack(Level world, BlockPos pos, Direction side) {
         Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, ForgeCapabilities.ITEM_HANDLER).orElse(null);
         return itemHandler != null || inventory != null;
     }
 
     @Override
     public ItemStack getItemStack(Level world, BlockPos pos, Direction side) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, ForgeCapabilities.ITEM_HANDLER).orElse(null);
         Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
         Pair<Integer, ItemStack> result = itemHandler != null ? getFirstItem(itemHandler, side) : getFirstItem(inventory, side);
         if (result != null) {
@@ -75,7 +75,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
 
     @Override
     public void reduceItemStack(Level world, BlockPos pos, Direction side, boolean simulate) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, ForgeCapabilities.ITEM_HANDLER).orElse(null);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
                 if(!itemHandler.extractItem(slot, 1, simulate).isEmpty()) {
@@ -98,7 +98,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
 
     @Override
     public boolean addItemStack(Level world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, ForgeCapabilities.ITEM_HANDLER).orElse(null);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
                 if(itemHandler.insertItem(slot, itemStack, simulate).isEmpty()) {
@@ -118,7 +118,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
 
     @Override
     public boolean setItemStack(Level world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, ForgeCapabilities.ITEM_HANDLER).orElse(null);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
                 if(itemHandler.insertItem(slot, itemStack, simulate).isEmpty()) {

@@ -197,7 +197,7 @@ public class WorldCraftingMatrix {
         public ItemStack getOutput(Level level) {
             Recipe recipe = getRecipe(level);
             if (recipe != null) {
-                return recipe.assemble(inventoryCrafting);
+                return recipe.assemble(inventoryCrafting, level.registryAccess());
             }
             return ItemStack.EMPTY;
         }

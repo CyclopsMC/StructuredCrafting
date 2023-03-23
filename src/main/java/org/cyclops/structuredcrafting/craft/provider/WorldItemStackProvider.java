@@ -10,8 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
 import org.cyclops.cyclopscore.helper.ItemStackHelpers;
@@ -55,7 +55,7 @@ public class WorldItemStackProvider implements IItemStackProvider {
     }
 
     protected boolean hasEmptyItemHandler(Level world, BlockPos pos, Direction side) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, ForgeCapabilities.ITEM_HANDLER).orElse(null);
         boolean emptyItemHandler = true;
         if (itemHandler != null) {
             for (int i = 0; i < itemHandler.getSlots(); i++) {
