@@ -1,7 +1,7 @@
 package org.cyclops.structuredcrafting.block;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraftforge.fml.config.ModConfig;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
@@ -49,7 +49,8 @@ public class BlockStructuredCrafterConfig extends BlockConfig {
         super(
                 StructuredCrafting._instance,
                 "structured_crafter",
-                (eConfig) -> new BlockStructuredCrafter(Block.Properties.of(Material.STONE)
+                (eConfig) -> new BlockStructuredCrafter(Block.Properties.of()
+                        .sound(SoundType.WOOD)
                         .strength(2.0f)),
                 getDefaultItemConstructor(StructuredCrafting._instance)
         );

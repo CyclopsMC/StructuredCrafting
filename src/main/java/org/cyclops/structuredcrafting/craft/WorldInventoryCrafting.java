@@ -2,9 +2,9 @@ package org.cyclops.structuredcrafting.craft;
 
 import com.google.common.base.Objects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
  * A world-based implementation of the crafting container.
  * @author rubensworks
  */
-public class WorldInventoryCrafting extends CraftingContainer {
+public class WorldInventoryCrafting extends TransientCraftingContainer {
 
     public WorldInventoryCrafting() {
         super(new AbstractContainerMenu(MenuType.CRAFTING, 0) {
