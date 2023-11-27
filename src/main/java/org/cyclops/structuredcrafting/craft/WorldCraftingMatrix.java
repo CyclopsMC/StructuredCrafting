@@ -144,11 +144,12 @@ public class WorldCraftingMatrix {
         // Determine output
         if(chosenPossibility != null && !itemStack.isEmpty()
                 && addItemStackForOutput(level, targetPos, targetSide, outputProviders, itemStack, true)) {
-            if (!simulate) {
-                addItemStackForOutput(level, targetPos, targetSide, outputProviders, itemStack, simulate);
+            if (chosenPossibility.handleRemainingItems(level, inputSide, simulate)) {
+                if (!simulate) {
+                    addItemStackForOutput(level, targetPos, targetSide, outputProviders, itemStack, simulate);
+                }
+                return true;
             }
-            chosenPossibility.handleRemainingItems(level, inputSide, simulate);
-            return true;
         }
         return false;
     }
@@ -208,7 +209,7 @@ public class WorldCraftingMatrix {
          * @param inputSide The crafting side.
          * @param simulate If the crafting should be simulated.
          */
-        public void handleRemainingItems(Level level, Direction inputSide, boolean simulate) {
+        public boolean handleRemainingItems(Level level, Direction inputSide, boolean simulate) {
             Recipe recipe = getRecipe(level);
             NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(inventoryCrafting);
             for(int i = 0; i < remainingStacks.size(); i++) {
@@ -216,7 +217,25 @@ public class WorldCraftingMatrix {
                 ItemStack remainingStack = remainingStacks.get(i);
                 if(originalStack != null && !originalStack.isEmpty()) {
                     if (providers[i] != null) {
-                        providers[i].reduceItemStack(level, positions[i], inputSide, simulate);
+                        // Consume one item from input
+                        boolean success = providers[i].reduceItemStack(level, positions[i], inputSide, simulate);
+
+                        // If consumption failed, consider the whole crafting job failed
+                        if (!success) {
+                            // Restore all previous slots if not simulating
+                            if (!simulate) {
+                                for(int j = 0; j < i; j++) {
+                                    ItemStack stackToRestore = inventoryCrafting.getItem(j);
+                                    if(stackToRestore != null && !stackToRestore.isEmpty() && providers[j] != null) {
+                                        providers[j].addItemStack(level, positions[j], inputSide, stackToRestore, false);
+                                    }
+                                }
+                            }
+
+                            return false;
+                        }
+
+                        // Add a possibly remaining stack to the slot
                         if (!remainingStack.isEmpty() && remainingStack.getCount() > 0) {
                             providers[i].addItemStack(level, positions[i], inputSide, remainingStack, simulate);
                         }
@@ -226,6 +245,7 @@ public class WorldCraftingMatrix {
                     }
                 }
             }
+            return true;
         }
 
         public CraftingPossibility clone() {

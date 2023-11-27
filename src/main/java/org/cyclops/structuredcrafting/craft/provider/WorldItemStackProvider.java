@@ -83,10 +83,12 @@ public class WorldItemStackProvider implements IItemStackProvider {
     }
 
     @Override
-    public void reduceItemStack(Level world, BlockPos pos, Direction side, boolean simulate) {
+    public boolean reduceItemStack(Level world, BlockPos pos, Direction side, boolean simulate) {
+        boolean wasAir = world.getBlockState(pos).isAir();
         if(!simulate) {
             world.removeBlock(pos, false);
         }
+        return !wasAir;
     }
 
     @Override
