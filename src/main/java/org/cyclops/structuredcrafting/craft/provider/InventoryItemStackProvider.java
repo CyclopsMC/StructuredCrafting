@@ -74,14 +74,17 @@ public class InventoryItemStackProvider implements IItemStackProvider {
     }
 
     @Override
-    public void reduceItemStack(Level world, BlockPos pos, Direction side, boolean simulate) {
+    public boolean reduceItemStack(Level world, BlockPos pos, Direction side, boolean simulate) {
         IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, ForgeCapabilities.ITEM_HANDLER).orElse(null);
         if(itemHandler != null) {
+            boolean extracted = false;
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
                 if(!itemHandler.extractItem(slot, 1, simulate).isEmpty()) {
+                    extracted = true;
                     break;
                 }
             }
+            return extracted;
         } else {
             Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
             Pair<Integer, ItemStack> result = getFirstItem(inventory, side);
@@ -93,6 +96,7 @@ public class InventoryItemStackProvider implements IItemStackProvider {
             if(!simulate) {
                 inventory.setItem(result.getLeft(), newItemStack);
             }
+            return true;
         }
     }
 
