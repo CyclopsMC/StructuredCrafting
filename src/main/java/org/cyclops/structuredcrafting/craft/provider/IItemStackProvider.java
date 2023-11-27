@@ -54,8 +54,9 @@ public interface IItemStackProvider {
      * @param pos The position.
      * @param side The side.
      * @param simulate If the operation should be simulated.
+     * @return If the item could be reduced
      */
-    public void reduceItemStack(Level world, BlockPos pos, Direction side, boolean simulate);
+    public boolean reduceItemStack(Level world, BlockPos pos, Direction side, boolean simulate);
 
     /**
      * Adds an itemstack.
