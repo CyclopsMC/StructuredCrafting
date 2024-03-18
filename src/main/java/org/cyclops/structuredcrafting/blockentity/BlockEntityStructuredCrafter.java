@@ -21,7 +21,7 @@ public class BlockEntityStructuredCrafter extends CyclopsBlockEntity {
     private int tickOffset;
 
     public BlockEntityStructuredCrafter(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER, blockPos, blockState);
+        super(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER.get(), blockPos, blockState);
         tickOffset = (int) (Math.random() * (float) SPEED);
     }
 

@@ -1,10 +1,11 @@
 package org.cyclops.structuredcrafting.modcompat.capabilities;
 
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.capabilities.BaseCapability;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import org.cyclops.commoncapabilities.api.capability.work.IWorker;
-import org.cyclops.cyclopscore.modcompat.capabilities.DefaultCapabilityProvider;
-import org.cyclops.cyclopscore.modcompat.capabilities.SimpleCapabilityConstructor;
+import org.cyclops.cyclopscore.modcompat.capabilities.ICapabilityConstructor;
 import org.cyclops.structuredcrafting.Capabilities;
 import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
 
@@ -14,16 +15,16 @@ import javax.annotation.Nullable;
  * Compatibility for structured crafter worker capability.
  * @author rubensworks
  */
-public class WorkerStructuredCrafterTileCompat extends SimpleCapabilityConstructor<IWorker, BlockEntityStructuredCrafter> {
+public class WorkerStructuredCrafterTileCompat implements ICapabilityConstructor<BlockEntityStructuredCrafter, Direction, IWorker, BlockEntityType<BlockEntityStructuredCrafter>> {
 
     @Nullable
     @Override
-    public ICapabilityProvider createProvider(BlockEntityStructuredCrafter host) {
-        return new DefaultCapabilityProvider<>(Capabilities.WORKER, new Worker(host));
+    public ICapabilityProvider<BlockEntityStructuredCrafter, Direction, IWorker> createProvider(BlockEntityType<BlockEntityStructuredCrafter> capabilityKey) {
+        return (blockEntity, side) -> new Worker(blockEntity);
     }
 
     @Override
-    public Capability<IWorker> getCapability() {
+    public BaseCapability<IWorker, Direction> getCapability() {
         return Capabilities.WORKER;
     }
 

@@ -1,8 +1,8 @@
 package org.cyclops.structuredcrafting;
 
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.cyclops.commoncapabilities.api.capability.work.IWorker;
 
 /**
@@ -10,5 +10,5 @@ import org.cyclops.commoncapabilities.api.capability.work.IWorker;
  * @author rubensworks
  */
 public class Capabilities {
-    public static Capability<IWorker> WORKER = CapabilityManager.get(new CapabilityToken<>(){});
+    public static BlockCapability<IWorker, Direction> WORKER = BlockCapability.createSided(new ResourceLocation("commoncapabilities", "worker"), IWorker.class);
 }

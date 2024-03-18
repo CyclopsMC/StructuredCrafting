@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.cyclops.cyclopscore.helper.CraftingHelpers;
@@ -16,6 +17,7 @@ import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProvider;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -191,8 +193,11 @@ public class WorldCraftingMatrix {
             providers[arrayIndex] = itemStackProvider;
         }
 
+        @Nullable
         protected Recipe getRecipe(Level level) {
-            return CraftingHelpers.findRecipeCached(RecipeType.CRAFTING, inventoryCrafting, level, true).orElse(null);
+            return CraftingHelpers.findRecipeCached(RecipeType.CRAFTING, inventoryCrafting, level, true)
+                    .map(RecipeHolder::value)
+                    .orElse(null);
         }
 
         public ItemStack getOutput(Level level) {

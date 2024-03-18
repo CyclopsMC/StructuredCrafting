@@ -1,9 +1,11 @@
 package org.cyclops.structuredcrafting;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.ObjectHolder;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
 
 /**
@@ -12,13 +14,10 @@ import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
  */
 public class RegistryEntries {
 
-    @ObjectHolder(registryName = "item", value = "structuredcrafting:structured_crafter")
-    public static final Item ITEM_STRUCTURED_CRAFTER = null;
+    public static final DeferredHolder<Item, Item> ITEM_STRUCTURED_CRAFTER = DeferredHolder.create(Registries.ITEM, new ResourceLocation("structuredcrafting:structured_crafter"));
 
-    @ObjectHolder(registryName = "block", value = "structuredcrafting:structured_crafter")
-    public static final Block BLOCK_STRUCTURED_CRAFTER = null;
+    public static final DeferredHolder<Block, Block> BLOCK_STRUCTURED_CRAFTER = DeferredHolder.create(Registries.BLOCK, new ResourceLocation("structuredcrafting:structured_crafter"));
 
-    @ObjectHolder(registryName = "block_entity_type", value = "structuredcrafting:structured_crafter")
-    public static final BlockEntityType<BlockEntityStructuredCrafter> BLOCK_ENTITY_STRUCTURED_CRAFTER = null;
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityStructuredCrafter>> BLOCK_ENTITY_STRUCTURED_CRAFTER = DeferredHolder.create(Registries.BLOCK_ENTITY_TYPE, new ResourceLocation("structuredcrafting:structured_crafter"));
 
 }

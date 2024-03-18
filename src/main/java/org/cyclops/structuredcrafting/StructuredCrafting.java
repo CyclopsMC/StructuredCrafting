@@ -2,8 +2,9 @@ package org.cyclops.structuredcrafting;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.Level;
 import org.cyclops.cyclopscore.config.ConfigHandler;
 import org.cyclops.cyclopscore.init.ModBaseVersionable;
@@ -11,8 +12,7 @@ import org.cyclops.cyclopscore.modcompat.ModCompatLoader;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
-import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
-import org.cyclops.structuredcrafting.blockentity.TileStructuredCrafterConfig;
+import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafterConfig;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.InventoryItemStackProvider;
 import org.cyclops.structuredcrafting.craft.provider.ItemStackProviderRegistry;
@@ -32,8 +32,8 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
      */
     public static StructuredCrafting _instance;
 
-    public StructuredCrafting() {
-        super(Reference.MOD_ID, (instance) -> _instance = instance);
+    public StructuredCrafting(IEventBus modEventBus) {
+        super(Reference.MOD_ID, (instance) -> _instance = instance, modEventBus);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
         super.loadModCompats(modCompatLoader);
 
         // Capabilities
-        getCapabilityConstructorRegistry().registerTile(BlockEntityStructuredCrafter.class, new WorkerStructuredCrafterTileCompat());
+        getCapabilityConstructorRegistry().registerBlockEntity(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER, new WorkerStructuredCrafterTileCompat());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
         configHandler.addConfigurable(new GeneralConfig());
 
         configHandler.addConfigurable(new BlockStructuredCrafterConfig());
-        configHandler.addConfigurable(new TileStructuredCrafterConfig());
+        configHandler.addConfigurable(new BlockEntityStructuredCrafterConfig());
     }
 
     /**

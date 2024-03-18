@@ -11,14 +11,14 @@ import org.cyclops.structuredcrafting.StructuredCrafting;
  * @author rubensworks
  *
  */
-public class TileStructuredCrafterConfig extends BlockEntityConfig<BlockEntityStructuredCrafter> {
+public class BlockEntityStructuredCrafterConfig extends BlockEntityConfig<BlockEntityStructuredCrafter> {
 
-    public TileStructuredCrafterConfig() {
+    public BlockEntityStructuredCrafterConfig() {
         super(
                 StructuredCrafting._instance,
                 "structured_crafter",
                 (eConfig) -> new BlockEntityType<>(BlockEntityStructuredCrafter::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_STRUCTURED_CRAFTER), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_STRUCTURED_CRAFTER.get()), null)
         );
     }
 
