@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -195,7 +196,7 @@ public class WorldCraftingMatrix {
 
         @Nullable
         protected Recipe getRecipe(Level level) {
-            return CraftingHelpers.findRecipeCached(RecipeType.CRAFTING, inventoryCrafting, level, true)
+            return CraftingHelpers.findRecipeCached(RecipeType.CRAFTING, inventoryCrafting.asCraftInput(), level, true)
                     .map(RecipeHolder::value)
                     .orElse(null);
         }
@@ -203,7 +204,7 @@ public class WorldCraftingMatrix {
         public ItemStack getOutput(Level level) {
             Recipe recipe = getRecipe(level);
             if (recipe != null) {
-                return recipe.assemble(inventoryCrafting, level.registryAccess());
+                return recipe.assemble(inventoryCrafting.asCraftInput(), level.registryAccess());
             }
             return ItemStack.EMPTY;
         }
@@ -216,37 +217,42 @@ public class WorldCraftingMatrix {
          */
         public boolean handleRemainingItems(Level level, Direction inputSide, boolean simulate) {
             Recipe recipe = getRecipe(level);
-            NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(inventoryCrafting);
-            for(int i = 0; i < remainingStacks.size(); i++) {
-                ItemStack originalStack = inventoryCrafting.getItem(i);
-                ItemStack remainingStack = remainingStacks.get(i);
-                if(originalStack != null && !originalStack.isEmpty()) {
-                    if (providers[i] != null) {
-                        // Consume one item from input
-                        boolean success = providers[i].reduceItemStack(level, positions[i], inputSide, simulate);
+            CraftingInput craftInput = inventoryCrafting.asCraftInput();
+            NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(craftInput);
+            for(int r = 0; r < 3; r++) {
+                for(int c = 0; c < 3; c++) {
+                    int i = r * 3 + c;
 
-                        // If consumption failed, consider the whole crafting job failed
-                        if (!success) {
-                            // Restore all previous slots if not simulating
-                            if (!simulate) {
-                                for(int j = 0; j < i; j++) {
-                                    ItemStack stackToRestore = inventoryCrafting.getItem(j);
-                                    if(stackToRestore != null && !stackToRestore.isEmpty() && providers[j] != null) {
-                                        providers[j].addItemStack(level, positions[j], inputSide, stackToRestore, false);
+                    ItemStack originalStack = inventoryCrafting.getItem(i);
+                    ItemStack remainingStack = r < craftInput.width() && c < craftInput.height() ? remainingStacks.get(r * craftInput.height() + c) : ItemStack.EMPTY;
+                    if(originalStack != null && !originalStack.isEmpty()) {
+                        if (providers[i] != null) {
+                            // Consume one item from input
+                            boolean success = providers[i].reduceItemStack(level, positions[i], inputSide, simulate);
+
+                            // If consumption failed, consider the whole crafting job failed
+                            if (!success) {
+                                // Restore all previous slots if not simulating
+                                if (!simulate) {
+                                    for(int j = 0; j < i; j++) {
+                                        ItemStack stackToRestore = inventoryCrafting.getItem(j);
+                                        if(stackToRestore != null && !stackToRestore.isEmpty() && providers[j] != null) {
+                                            providers[j].addItemStack(level, positions[j], inputSide, stackToRestore, false);
+                                        }
                                     }
                                 }
+
+                                return false;
                             }
 
-                            return false;
+                            // Add a possibly remaining stack to the slot
+                            if (!remainingStack.isEmpty() && remainingStack.getCount() > 0) {
+                                providers[i].addItemStack(level, positions[i], inputSide, remainingStack, simulate);
+                            }
+                        } else {
+                            StructuredCrafting.clog(org.apache.logging.log4j.Level.WARN, "The structured crafting provider for position "
+                                    + i + " did not exist for stack " + originalStack);
                         }
-
-                        // Add a possibly remaining stack to the slot
-                        if (!remainingStack.isEmpty() && remainingStack.getCount() > 0) {
-                            providers[i].addItemStack(level, positions[i], inputSide, remainingStack, simulate);
-                        }
-                    } else {
-                        StructuredCrafting.clog(org.apache.logging.log4j.Level.WARN, "The structured crafting provider for position "
-                                + i + " did not exist for stack " + originalStack);
                     }
                 }
             }

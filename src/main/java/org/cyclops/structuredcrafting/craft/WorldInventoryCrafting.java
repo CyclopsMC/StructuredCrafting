@@ -60,7 +60,7 @@ public class WorldInventoryCrafting extends TransientCraftingContainer {
             return 0;
         }
         return Objects.hashCode(itemStack.getCount(), Item.getId(itemStack.getItem()),
-                itemStack.hasTag() ? itemStack.getTag() : 0);
+                itemStack.getComponents().isEmpty() ? itemStack.getComponents().hashCode() : 0);
     }
 
     @Override

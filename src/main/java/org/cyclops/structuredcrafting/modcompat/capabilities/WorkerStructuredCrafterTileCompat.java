@@ -4,9 +4,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.BaseCapability;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import org.cyclops.commoncapabilities.api.capability.Capabilities;
 import org.cyclops.commoncapabilities.api.capability.work.IWorker;
 import org.cyclops.cyclopscore.modcompat.capabilities.ICapabilityConstructor;
-import org.cyclops.structuredcrafting.Capabilities;
 import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
 
 import javax.annotation.Nullable;
@@ -25,7 +25,7 @@ public class WorkerStructuredCrafterTileCompat implements ICapabilityConstructor
 
     @Override
     public BaseCapability<IWorker, Direction> getCapability() {
-        return Capabilities.WORKER;
+        return Capabilities.Worker.BLOCK;
     }
 
     public static class Worker implements IWorker {
