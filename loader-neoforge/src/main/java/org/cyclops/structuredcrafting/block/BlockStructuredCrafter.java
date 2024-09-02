@@ -51,7 +51,7 @@ public class BlockStructuredCrafter extends BlockWithEntity {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER.get(), new BlockEntityStructuredCrafter.Ticker());
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER.value(), new BlockEntityStructuredCrafter.Ticker());
     }
 
     @Override

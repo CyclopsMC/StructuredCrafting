@@ -68,14 +68,14 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
     @Override
     protected CreativeModeTab.Builder constructDefaultCreativeModeTab(CreativeModeTab.Builder builder) {
         return super.constructDefaultCreativeModeTab(builder)
-                .icon(() -> new ItemStack(RegistryEntries.ITEM_STRUCTURED_CRAFTER));
+                .icon(() -> new ItemStack(RegistryEntriesCommon.ITEM_STRUCTURED_CRAFTER));
     }
 
     @Override
     protected void onConfigsRegister(ConfigHandler configHandler) {
         super.onConfigsRegister(configHandler);
 
-        configHandler.addConfigurable(new GeneralConfig());
+        configHandler.addConfigurable(new GeneralConfig(this));
 
         configHandler.addConfigurable(new BlockStructuredCrafterConfig());
         configHandler.addConfigurable(new BlockEntityStructuredCrafterConfig());
