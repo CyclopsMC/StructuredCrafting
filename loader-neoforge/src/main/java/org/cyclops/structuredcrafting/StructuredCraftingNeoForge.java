@@ -14,9 +14,9 @@ import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
 import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafterConfig;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
-import org.cyclops.structuredcrafting.craft.provider.InventoryItemStackProvider;
+import org.cyclops.structuredcrafting.craft.provider.InventoryItemStackProviderNeoForge;
 import org.cyclops.structuredcrafting.craft.provider.ItemStackProviderRegistry;
-import org.cyclops.structuredcrafting.craft.provider.WorldItemStackProvider;
+import org.cyclops.structuredcrafting.craft.provider.WorldItemStackProviderNeoForge;
 import org.cyclops.structuredcrafting.modcompat.capabilities.WorkerStructuredCrafterTileCompat;
 
 /**
@@ -25,14 +25,14 @@ import org.cyclops.structuredcrafting.modcompat.capabilities.WorkerStructuredCra
  *
  */
 @Mod(Reference.MOD_ID)
-public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> implements IStructuredCraftingMod {
+public class StructuredCraftingNeoForge extends ModBaseVersionable<StructuredCraftingNeoForge> implements IStructuredCraftingMod {
 
     /**
      * The unique instance of this mod.
      */
-    public static StructuredCrafting _instance;
+    public static StructuredCraftingNeoForge _instance;
 
-    public StructuredCrafting(IEventBus modEventBus) {
+    public StructuredCraftingNeoForge(IEventBus modEventBus) {
         super(Reference.MOD_ID, (instance) -> {
             _instance = instance;
             IStructuredCraftingMod.MOD.set(instance);
@@ -54,8 +54,8 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> i
         super.setup(event);
 
         IItemStackProviderRegistry registry = getRegistryManager().getRegistry(IItemStackProviderRegistry.class);
-        registry.registerProvider(new InventoryItemStackProvider());
-        registry.registerProvider(new WorldItemStackProvider());
+        registry.registerProvider(new InventoryItemStackProviderNeoForge());
+        registry.registerProvider(new WorldItemStackProviderNeoForge());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> i
      * @param message The message to show.
      */
     public static void clog(String message) {
-        StructuredCrafting._instance.log(Level.INFO, message);
+        StructuredCraftingNeoForge._instance.log(Level.INFO, message);
     }
 
     /**
@@ -98,6 +98,6 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> i
      * @param message The message to show.
      */
     public static void clog(Level level, String message) {
-        StructuredCrafting._instance.log(level, message);
+        StructuredCraftingNeoForge._instance.log(level, message);
     }
 }

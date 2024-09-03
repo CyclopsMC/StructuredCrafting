@@ -16,7 +16,7 @@ import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
  * Inventory that can provide itemstacks.
  * @author rubensworks
  */
-public class InventoryItemStackProvider implements IItemStackProvider {
+public class InventoryItemStackProviderNeoForge implements IItemStackProvider {
 
     protected Pair<Integer, ItemStack> getFirstItem(Container inventory, Direction side) {
         for(int slot = 0; slot < inventory.getContainerSize(); slot++) {

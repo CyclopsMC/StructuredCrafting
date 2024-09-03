@@ -20,7 +20,7 @@ import java.util.WeakHashMap;
  * World that can provide an itemstack.
  * @author rubensworks
  */
-public class WorldItemStackProvider extends WorldItemStackProviderBase {
+public class WorldItemStackProviderNeoForge extends WorldItemStackProviderBase {
 
     private static final Map<ServerLevel, FakePlayer> FAKE_PLAYERS = new WeakHashMap<ServerLevel, FakePlayer>();
 
