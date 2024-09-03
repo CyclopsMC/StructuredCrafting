@@ -25,7 +25,7 @@ import org.cyclops.structuredcrafting.modcompat.capabilities.WorkerStructuredCra
  *
  */
 @Mod(Reference.MOD_ID)
-public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
+public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> implements IStructuredCraftingMod {
 
     /**
      * The unique instance of this mod.
@@ -33,7 +33,10 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
     public static StructuredCrafting _instance;
 
     public StructuredCrafting(IEventBus modEventBus) {
-        super(Reference.MOD_ID, (instance) -> _instance = instance, modEventBus);
+        super(Reference.MOD_ID, (instance) -> {
+            _instance = instance;
+            IStructuredCraftingMod.MOD.set(instance);
+        }, modEventBus);
     }
 
     @Override
@@ -41,7 +44,7 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
         super.loadModCompats(modCompatLoader);
 
         // Capabilities
-        getCapabilityConstructorRegistry().registerBlockEntity(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER, new WorkerStructuredCrafterTileCompat());
+        getCapabilityConstructorRegistry().registerBlockEntity(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER::value, new WorkerStructuredCrafterTileCompat());
     }
 
     @Override
@@ -68,7 +71,7 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
     @Override
     protected CreativeModeTab.Builder constructDefaultCreativeModeTab(CreativeModeTab.Builder builder) {
         return super.constructDefaultCreativeModeTab(builder)
-                .icon(() -> new ItemStack(RegistryEntriesCommon.ITEM_STRUCTURED_CRAFTER));
+                .icon(() -> new ItemStack(RegistryEntries.ITEM_STRUCTURED_CRAFTER));
     }
 
     @Override
@@ -77,8 +80,8 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
 
         configHandler.addConfigurable(new GeneralConfig(this));
 
-        configHandler.addConfigurable(new BlockStructuredCrafterConfig());
-        configHandler.addConfigurable(new BlockEntityStructuredCrafterConfig());
+        configHandler.addConfigurable(new BlockStructuredCrafterConfig<>(this));
+        configHandler.addConfigurable(new BlockEntityStructuredCrafterConfig<>(this));
     }
 
     /**

@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.cyclops.cyclopscore.blockentity.BlockEntityTickerDelayed;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntityCommon;
 import org.cyclops.structuredcrafting.RegistryEntries;
 import org.cyclops.structuredcrafting.craft.WorldCraftingMatrix;
 
@@ -12,7 +12,7 @@ import org.cyclops.structuredcrafting.craft.WorldCraftingMatrix;
  * A ticking block entity for the structured crafter.
  * @author rubensworks
  */
-public class BlockEntityStructuredCrafter extends CyclopsBlockEntity {
+public class BlockEntityStructuredCrafter extends CyclopsBlockEntityCommon {
 
     private static final int SPEED = 20;
 
@@ -21,7 +21,7 @@ public class BlockEntityStructuredCrafter extends CyclopsBlockEntity {
     private int tickOffset;
 
     public BlockEntityStructuredCrafter(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER.get(), blockPos, blockState);
+        super(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER.value(), blockPos, blockState);
         tickOffset = (int) (Math.random() * (float) SPEED);
     }
 

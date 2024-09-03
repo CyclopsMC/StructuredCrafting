@@ -15,12 +15,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import org.cyclops.cyclopscore.block.BlockWithEntity;
+import org.cyclops.cyclopscore.block.BlockWithEntityCommon;
 import org.cyclops.structuredcrafting.RegistryEntries;
 import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
 
@@ -30,9 +31,9 @@ import javax.annotation.Nullable;
  * This block will detect neighbour block updates and will try to craft a new block/item from them.
  * @author rubensworks
  */
-public class BlockStructuredCrafter extends BlockWithEntity {
+public class BlockStructuredCrafter extends BlockWithEntityCommon {
 
-    public static final MapCodec<BlockStructuredCrafter> CODEC = simpleCodec(BlockStructuredCrafter::new);
+    public static final MapCodec<BlockStructuredCrafter> CODEC = BlockBehaviour.simpleCodec(BlockStructuredCrafter::new);
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
@@ -51,7 +52,7 @@ public class BlockStructuredCrafter extends BlockWithEntity {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER.value(), new BlockEntityStructuredCrafter.Ticker());
+        return level.isClientSide ? null : BaseEntityBlock.createTickerHelper(blockEntityType, RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER.value(), new BlockEntityStructuredCrafter.Ticker());
     }
 
     @Override

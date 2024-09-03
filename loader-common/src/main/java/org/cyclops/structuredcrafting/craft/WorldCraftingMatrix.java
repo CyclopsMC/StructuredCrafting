@@ -2,7 +2,6 @@ package org.cyclops.structuredcrafting.craft;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import lombok.ToString;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -12,13 +11,14 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import org.cyclops.cyclopscore.helper.CraftingHelpers;
-import org.cyclops.structuredcrafting.StructuredCrafting;
+import org.cyclops.cyclopscore.helper.IModHelpers;
+import org.cyclops.structuredcrafting.IStructuredCraftingMod;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProvider;
 import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +56,7 @@ public class WorldCraftingMatrix {
     }
 
     protected List<IItemStackProvider> getItemStackProviders() {
-        return StructuredCrafting._instance.getRegistryManager().
+        return IStructuredCraftingMod.MOD.get().getRegistryManager().
                 getRegistry(IItemStackProviderRegistry.class).getProviders();
     }
 
@@ -163,7 +163,6 @@ public class WorldCraftingMatrix {
                 centerPos.relative(side.getOpposite()), side.getOpposite());
     }
 
-    @ToString
     public static class CraftingPossibility {
         private final WorldInventoryCrafting inventoryCrafting = new WorldInventoryCrafting();
         private final BlockPos[] positions = new BlockPos[9];
@@ -196,7 +195,7 @@ public class WorldCraftingMatrix {
 
         @Nullable
         protected Recipe getRecipe(Level level) {
-            return CraftingHelpers.findRecipeCached(RecipeType.CRAFTING, inventoryCrafting.asCraftInput(), level, true)
+            return IModHelpers.get().getCraftingHelpers().findRecipeCached(RecipeType.CRAFTING, inventoryCrafting.asCraftInput(), level, true)
                     .map(RecipeHolder::value)
                     .orElse(null);
         }
@@ -250,7 +249,7 @@ public class WorldCraftingMatrix {
                                 providers[i].addItemStack(level, positions[i], inputSide, remainingStack, simulate);
                             }
                         } else {
-                            StructuredCrafting.clog(org.apache.logging.log4j.Level.WARN, "The structured crafting provider for position "
+                            IStructuredCraftingMod.MOD.get().getLoggerHelper().log(org.apache.logging.log4j.Level.WARN, "The structured crafting provider for position "
                                     + i + " did not exist for stack " + originalStack);
                         }
                     }
@@ -267,6 +266,15 @@ public class WorldCraftingMatrix {
             System.arraycopy(this.positions, 0, craftingPossibility.positions, 0, this.positions.length);
             System.arraycopy(this.providers, 0, craftingPossibility.providers, 0, this.providers.length);
             return craftingPossibility;
+        }
+
+        @Override
+        public String toString() {
+            return "CraftingPossibility{" +
+                    "inventoryCrafting=" + inventoryCrafting +
+                    ", positions=" + Arrays.toString(positions) +
+                    ", providers=" + Arrays.toString(providers) +
+                    '}';
         }
     }
 
