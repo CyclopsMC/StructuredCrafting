@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "org.cyclops.structuredcrafting.StructuredCraftingFabric"
+    ],
+    "fabric-gametest": [
+      "org.cyclops.structuredcrafting.gametest.GameTestsCommon"
     ]
   },
 
