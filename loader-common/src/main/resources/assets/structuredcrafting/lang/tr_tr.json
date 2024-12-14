@@ -1,1 +1,5 @@
-{}
+{
+  "_comment": "Bloklar",
+  "itemGroup.structuredcrafting": "Yapısal Üretim",
+  "block.structuredcrafting.structured_crafter": "Yapısal Üretici"
+}
