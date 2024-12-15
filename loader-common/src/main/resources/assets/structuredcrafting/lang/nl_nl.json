@@ -1,1 +1,5 @@
-{}
+{
+  "_comment": "Blokken",
+  "itemGroup.structuredcrafting": "Structured Crafting",
+  "block.structuredcrafting.structured_crafter": "Gestructureerde vervaardigingsmachine"
+}
