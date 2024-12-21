@@ -1,1 +1,5 @@
-{}
+{
+  "_comment": "Bloky",
+  "itemGroup.structuredcrafting": "Structured Crafting",
+  "block.structuredcrafting.structured_crafter": "Strukturovaný výrobník"
+}
