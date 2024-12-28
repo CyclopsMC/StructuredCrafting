@@ -40,7 +40,7 @@ public class WorldItemStackProviderForge extends WorldItemStackProviderBase {
     public ItemStack getItemStack(Level world, BlockPos pos, Direction side) {
         BlockState blockState = world.getBlockState(pos);
         if(blockState != null && hasEmptyItemHandler(world, pos, side)) {
-            return blockState.getBlock().getCloneItemStack(world, pos, blockState);
+            return blockState.getCloneItemStack(world, pos, true);
         }
         return ItemStack.EMPTY;
     }

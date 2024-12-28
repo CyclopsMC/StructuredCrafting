@@ -6,10 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.cyclops.cyclopscore.helper.IModHelpers;
 import org.cyclops.structuredcrafting.IStructuredCraftingMod;
@@ -194,7 +191,7 @@ public class WorldCraftingMatrix {
         }
 
         @Nullable
-        protected Recipe getRecipe(Level level) {
+        protected CraftingRecipe getRecipe(Level level) {
             return IModHelpers.get().getCraftingHelpers().findRecipeCached(RecipeType.CRAFTING, inventoryCrafting.asCraftInput(), level, true)
                     .map(RecipeHolder::value)
                     .orElse(null);
@@ -215,7 +212,7 @@ public class WorldCraftingMatrix {
          * @param simulate If the crafting should be simulated.
          */
         public boolean handleRemainingItems(Level level, Direction inputSide, boolean simulate) {
-            Recipe recipe = getRecipe(level);
+            CraftingRecipe recipe = getRecipe(level);
             CraftingInput craftInput = inventoryCrafting.asCraftInput();
             NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(craftInput);
             for(int r = 0; r < 3; r++) {

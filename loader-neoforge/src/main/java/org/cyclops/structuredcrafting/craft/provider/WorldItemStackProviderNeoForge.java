@@ -6,12 +6,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.items.IItemHandler;
-import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
+import org.cyclops.cyclopscore.helper.IModHelpersNeoForge;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -35,7 +33,7 @@ public class WorldItemStackProviderNeoForge extends WorldItemStackProviderBase {
 
     @Override
     protected boolean hasEmptyItemHandler(Level world, BlockPos pos, Direction side) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
+        IItemHandler itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
         boolean emptyItemHandler = true;
         if (itemHandler != null) {
             for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -51,8 +49,8 @@ public class WorldItemStackProviderNeoForge extends WorldItemStackProviderBase {
     @Override
     public ItemStack getItemStack(Level world, BlockPos pos, Direction side) {
         BlockState blockState = world.getBlockState(pos);
-        if(blockState != null && hasEmptyItemHandler(world, pos, side)) {
-            return blockState.getCloneItemStack(new BlockHitResult(new Vec3(0, 0, 0), side, pos, false), world, pos, getFakePlayer((ServerLevel) world));
+        if (!blockState.isAir() && hasEmptyItemHandler(world, pos, side)) {
+            return blockState.getCloneItemStack(pos, world, true, getFakePlayer((ServerLevel) world));
         }
         return ItemStack.EMPTY;
     }

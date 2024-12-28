@@ -25,6 +25,7 @@
       "org.cyclops.structuredcrafting.gametest.GameTestsCommon"
     ]
   },
+  "accessWidener" : "structuredcrafting.accesswidener",
 
   "depends": {
     "cyclopscore": ">=${cyclopscore_version_semver}",

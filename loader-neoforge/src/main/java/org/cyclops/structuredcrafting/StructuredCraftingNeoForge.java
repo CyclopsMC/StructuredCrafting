@@ -6,8 +6,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.Level;
-import org.cyclops.cyclopscore.config.ConfigHandler;
-import org.cyclops.cyclopscore.init.ModBaseVersionable;
+import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
+import org.cyclops.cyclopscore.init.ModBaseNeoForge;
 import org.cyclops.cyclopscore.modcompat.ModCompatLoader;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
@@ -25,7 +25,7 @@ import org.cyclops.structuredcrafting.modcompat.capabilities.WorkerStructuredCra
  *
  */
 @Mod(Reference.MOD_ID)
-public class StructuredCraftingNeoForge extends ModBaseVersionable<StructuredCraftingNeoForge> implements IStructuredCraftingMod {
+public class StructuredCraftingNeoForge extends ModBaseNeoForge<StructuredCraftingNeoForge> implements IStructuredCraftingMod {
 
     /**
      * The unique instance of this mod.
@@ -75,7 +75,7 @@ public class StructuredCraftingNeoForge extends ModBaseVersionable<StructuredCra
     }
 
     @Override
-    protected void onConfigsRegister(ConfigHandler configHandler) {
+    protected void onConfigsRegister(ConfigHandlerCommon configHandler) {
         super.onConfigsRegister(configHandler);
 
         configHandler.addConfigurable(new GeneralConfig(this));

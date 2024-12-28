@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -19,9 +19,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import org.cyclops.cyclopscore.block.BlockWithEntityCommon;
+import org.cyclops.cyclopscore.block.BlockWithEntity;
 import org.cyclops.structuredcrafting.RegistryEntries;
 import org.cyclops.structuredcrafting.blockentity.BlockEntityStructuredCrafter;
 
@@ -31,11 +31,11 @@ import javax.annotation.Nullable;
  * This block will detect neighbour block updates and will try to craft a new block/item from them.
  * @author rubensworks
  */
-public class BlockStructuredCrafter extends BlockWithEntityCommon {
+public class BlockStructuredCrafter extends BlockWithEntity {
 
     public static final MapCodec<BlockStructuredCrafter> CODEC = BlockBehaviour.simpleCodec(BlockStructuredCrafter::new);
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
     public BlockStructuredCrafter(Block.Properties properties) {
         super(properties, BlockEntityStructuredCrafter::new);
@@ -68,11 +68,11 @@ public class BlockStructuredCrafter extends BlockWithEntityCommon {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack heldItem = player.getItemInHand(hand);
         if(player != null && heldItem.getItem() == Items.STICK) {
             level.setBlockAndUpdate(pos, blockState.setValue(FACING, hit.getDirection().getOpposite()));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(itemStack, blockState, level, pos, player, hand, hit);
     }

@@ -18,7 +18,7 @@ public class BlockEntityStructuredCrafterConfig<M extends IModBase> extends Bloc
                 mod,
                 "structured_crafter",
                 (eConfig) -> new BlockEntityType<>(BlockEntityStructuredCrafter::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_STRUCTURED_CRAFTER.value()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_STRUCTURED_CRAFTER.value()))
         );
     }
 

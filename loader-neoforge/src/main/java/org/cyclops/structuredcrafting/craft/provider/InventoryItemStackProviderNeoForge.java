@@ -8,8 +8,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
-import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
-import org.cyclops.cyclopscore.helper.InventoryHelpers;
+import org.cyclops.cyclopscore.helper.IModHelpers;
+import org.cyclops.cyclopscore.helper.IModHelpersNeoForge;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafterConfig;
 
 /**
@@ -50,22 +50,22 @@ public class InventoryItemStackProviderNeoForge implements IItemStackProvider {
 
     @Override
     public boolean isValidForResults(Level world, BlockPos pos, Direction side) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
-        Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
+        IItemHandler itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
+        Container inventory = IModHelpers.get().getBlockEntityHelpers().get(world, pos, Container.class).orElse(null);
         return itemHandler != null || inventory != null;
     }
 
     @Override
     public boolean hasItemStack(Level world, BlockPos pos, Direction side) {
-        Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
+        Container inventory = IModHelpers.get().getBlockEntityHelpers().get(world, pos, Container.class).orElse(null);
+        IItemHandler itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
         return itemHandler != null || inventory != null;
     }
 
     @Override
     public ItemStack getItemStack(Level world, BlockPos pos, Direction side) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
-        Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
+        IItemHandler itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
+        Container inventory = IModHelpers.get().getBlockEntityHelpers().get(world, pos, Container.class).orElse(null);
         Pair<Integer, ItemStack> result = itemHandler != null ? getFirstItem(itemHandler, side) : getFirstItem(inventory, side);
         if (result != null) {
             return result.getRight();
@@ -75,7 +75,7 @@ public class InventoryItemStackProviderNeoForge implements IItemStackProvider {
 
     @Override
     public boolean reduceItemStack(Level world, BlockPos pos, Direction side, boolean simulate) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
+        IItemHandler itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
         if(itemHandler != null) {
             boolean extracted = false;
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
@@ -86,7 +86,7 @@ public class InventoryItemStackProviderNeoForge implements IItemStackProvider {
             }
             return extracted;
         } else {
-            Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
+            Container inventory = IModHelpers.get().getBlockEntityHelpers().get(world, pos, Container.class).orElse(null);
             Pair<Integer, ItemStack> result = getFirstItem(inventory, side);
             ItemStack newItemStack = result.getRight().copy();
             newItemStack.shrink(1);
@@ -102,7 +102,7 @@ public class InventoryItemStackProviderNeoForge implements IItemStackProvider {
 
     @Override
     public boolean addItemStack(Level world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
+        IItemHandler itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
                 if(itemHandler.insertItem(slot, itemStack, simulate).isEmpty()) {
@@ -110,9 +110,9 @@ public class InventoryItemStackProviderNeoForge implements IItemStackProvider {
                 }
             }
         } else {
-            Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
+            Container inventory = IModHelpers.get().getBlockEntityHelpers().get(world, pos, Container.class).orElse(null);
             for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
-                if (InventoryHelpers.addToSlot(inventory, slot, itemStack, simulate)) {
+                if (IModHelpers.get().getInventoryHelpers().addToSlot(inventory, slot, itemStack, simulate)) {
                     return true;
                 }
             }
@@ -122,7 +122,7 @@ public class InventoryItemStackProviderNeoForge implements IItemStackProvider {
 
     @Override
     public boolean setItemStack(Level world, BlockPos pos, Direction side, ItemStack itemStack, boolean simulate) {
-        IItemHandler itemHandler = BlockEntityHelpers.getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
+        IItemHandler itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
         if(itemHandler != null) {
             for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
                 if(itemHandler.insertItem(slot, itemStack, simulate).isEmpty()) {
@@ -130,7 +130,7 @@ public class InventoryItemStackProviderNeoForge implements IItemStackProvider {
                 }
             }
         } else {
-            Container inventory = BlockEntityHelpers.get(world, pos, Container.class).orElse(null);
+            Container inventory = IModHelpers.get().getBlockEntityHelpers().get(world, pos, Container.class).orElse(null);
             Pair<Integer, ItemStack> result = getFirstItem(inventory, side);
             if (result != null) {
                 if(!simulate) {

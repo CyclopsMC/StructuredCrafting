@@ -7,18 +7,10 @@
     "SCS"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:stick"
-    },
-    "C": {
-      "tag": "c:cobblestones"
-    },
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "R": {
-      "item": "minecraft:crafting_table"
-    }
+    "S": "minecraft:stick",
+    "C": "#c:cobblestones",
+    "I": "#c:ingots/iron",
+    "R": "minecraft:crafting_table"
   },
   "result": {
     "id": "structuredcrafting:structured_crafter"

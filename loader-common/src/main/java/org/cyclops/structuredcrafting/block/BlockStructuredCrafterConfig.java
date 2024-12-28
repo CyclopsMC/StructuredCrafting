@@ -1,6 +1,5 @@
 package org.cyclops.structuredcrafting.block;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import org.cyclops.cyclopscore.config.ConfigurablePropertyCommon;
 import org.cyclops.cyclopscore.config.ModConfigLocation;
@@ -44,7 +43,7 @@ public class BlockStructuredCrafterConfig<M extends IModBase> extends BlockConfi
         super(
                 mod,
                 "structured_crafter",
-                (eConfig) -> new BlockStructuredCrafter(Block.Properties.of()
+                (eConfig, properties) -> new BlockStructuredCrafter(properties
                         .sound(SoundType.WOOD)
                         .strength(2.0f)),
                 BlockConfigCommon.getDefaultItemConstructor(mod)
