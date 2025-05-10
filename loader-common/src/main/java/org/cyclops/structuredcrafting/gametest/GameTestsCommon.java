@@ -7,6 +7,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
@@ -232,6 +233,46 @@ public class GameTestsCommon {
             assertChestEmpty(helper, POS.offset(3, 2, 3));
             assertChestEmpty(helper, POS.offset(2, 2, 3));
             assertChestEmpty(helper, POS.offset(3, 3, 3));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testCraftFromChestsToChestCakeReusable(GameTestHelper helper) {
+        helper.setBlock(POS.offset(2, 2, 2), RegistryEntries.BLOCK_STRUCTURED_CRAFTER.value()
+                .defaultBlockState()
+                .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
+
+        // Define inputs
+        setChestWithItem(helper, POS.offset(3, 3, 3), new ItemStack(Items.MILK_BUCKET));
+        setChestWithItem(helper, POS.offset(2, 3, 3), new ItemStack(Items.MILK_BUCKET));
+        setChestWithItem(helper, POS.offset(1, 3, 3), new ItemStack(Items.MILK_BUCKET));
+        setChestWithItem(helper, POS.offset(3, 2, 3), new ItemStack(Items.SUGAR));
+        setChestWithItem(helper, POS.offset(2, 2, 3), new ItemStack(Items.EGG));
+        setChestWithItem(helper, POS.offset(1, 2, 3), new ItemStack(Items.SUGAR));
+        setChestWithItem(helper, POS.offset(3, 1, 3), new ItemStack(Items.WHEAT));
+        setChestWithItem(helper, POS.offset(2, 1, 3), new ItemStack(Items.WHEAT));
+        setChestWithItem(helper, POS.offset(1, 1, 3), new ItemStack(Items.WHEAT));
+
+        // Set output chest
+        helper.setBlock(POS.offset(2, 2, 1), Blocks.CHEST);
+
+        // Activate crafter
+        helper.setBlock(POS.offset(1, 2, 2), Blocks.REDSTONE_BLOCK);
+
+        helper.succeedWhen(() -> {
+            // Result
+            assertChestContains(helper, POS.offset(2, 2, 1), new ItemStack(Blocks.CAKE));
+
+            // Inputs must be consumed
+            assertChestContains(helper, POS.offset(3, 3, 3), new ItemStack(Items.BUCKET));
+            assertChestContains(helper, POS.offset(2, 3, 3), new ItemStack(Items.BUCKET));
+            assertChestContains(helper, POS.offset(1, 3, 3), new ItemStack(Items.BUCKET));
+            assertChestEmpty(helper, POS.offset(3, 2, 3));
+            assertChestEmpty(helper, POS.offset(2, 2, 3));
+            assertChestEmpty(helper, POS.offset(1, 2, 3));
+            assertChestEmpty(helper, POS.offset(3, 1, 3));
+            assertChestEmpty(helper, POS.offset(2, 1, 3));
+            assertChestEmpty(helper, POS.offset(1, 1, 3));
         });
     }
 
