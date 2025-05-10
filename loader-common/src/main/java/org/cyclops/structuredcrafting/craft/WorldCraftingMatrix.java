@@ -213,14 +213,17 @@ public class WorldCraftingMatrix {
          */
         public boolean handleRemainingItems(Level level, Direction inputSide, boolean simulate) {
             CraftingRecipe recipe = getRecipe(level);
-            CraftingInput craftInput = inventoryCrafting.asCraftInput();
+            CraftingInput.Positioned craftInputPositioned = inventoryCrafting.asPositionedCraftInput();
+            CraftingInput craftInput = craftInputPositioned.input();
+            int left = craftInputPositioned.left();
+            int top = craftInputPositioned.top();
             NonNullList<ItemStack> remainingStacks = recipe.getRemainingItems(craftInput);
             for(int r = 0; r < 3; r++) {
                 for(int c = 0; c < 3; c++) {
                     int i = r * 3 + c;
 
                     ItemStack originalStack = inventoryCrafting.getItem(i);
-                    ItemStack remainingStack = r < craftInput.width() && c < craftInput.height() ? remainingStacks.get(r * craftInput.height() + c) : ItemStack.EMPTY;
+                    ItemStack remainingStack = r >= top && r < craftInput.width() && c >= left && c < craftInput.height() ? remainingStacks.get((r - top) * craftInput.height() + c - left) : ItemStack.EMPTY;
                     if(originalStack != null && !originalStack.isEmpty()) {
                         if (providers[i] != null) {
                             // Consume one item from input

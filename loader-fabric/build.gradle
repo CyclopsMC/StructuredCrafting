@@ -21,6 +21,9 @@ dependencies {
     }
 
     modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${fabric_forgeconfigapiport_version}"
+
+//    modImplementation files("libs/moonlight-1.21-2.18.13-fabric.jar")
+//    modImplementation files("libs/supplementaries-1.21-3.1.7-fabric.jar")
 }
 
 task publishCurseForge(type: TaskPublishCurseForge) {
