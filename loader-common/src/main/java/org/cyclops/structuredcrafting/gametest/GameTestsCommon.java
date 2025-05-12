@@ -461,6 +461,96 @@ public class GameTestsCommon {
         });
     }
 
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testCraftFromChestsToChestBannerCopy5(GameTestHelper helper) {
+        helper.setBlock(POS.offset(2, 2, 2), RegistryEntries.BLOCK_STRUCTURED_CRAFTER.value()
+                .defaultBlockState()
+                .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
+
+        ItemStack patternBanner = new ItemStack(Items.WHITE_BANNER);
+        patternBanner.set(DataComponents.BANNER_PATTERNS, new BannerPatternLayers.Builder()
+                .add(helper.getLevel().registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.FLOWER).get(), DyeColor.YELLOW)
+                .build());
+
+        // Define inputs
+        setChestWithItem(helper, POS.offset(3, 3, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(2, 3, 3), new ItemStack(Items.WHITE_BANNER));
+        setChestWithItem(helper, POS.offset(1, 3, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(3, 2, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(2, 2, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(1, 2, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(3, 1, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(2, 1, 3), patternBanner.copy());
+        setChestWithItem(helper, POS.offset(1, 1, 3), ItemStack.EMPTY);
+
+        // Set output chest
+        helper.setBlock(POS.offset(2, 2, 1), Blocks.CHEST);
+
+        // Activate crafter
+        helper.setBlock(POS.offset(1, 2, 2), Blocks.REDSTONE_BLOCK);
+
+        helper.succeedWhen(() -> {
+            // Result
+            assertChestContains(helper, POS.offset(2, 2, 1), patternBanner);
+
+            // Inputs must be consumed
+            assertChestEmpty(helper, POS.offset(3, 3, 3));
+            assertChestEmpty(helper, POS.offset(2, 3, 3));
+            assertChestEmpty(helper, POS.offset(1, 3, 3));
+            assertChestEmpty(helper, POS.offset(3, 2, 3));
+            assertChestEmpty(helper, POS.offset(2, 2, 3));
+            assertChestEmpty(helper, POS.offset(1, 2, 3));
+            assertChestEmpty(helper, POS.offset(3, 1, 3));
+            assertChestContains(helper, POS.offset(2, 1, 3), patternBanner);
+            assertChestEmpty(helper, POS.offset(1, 1, 3));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testCraftFromChestsToChestBannerCopy6(GameTestHelper helper) {
+        helper.setBlock(POS.offset(2, 2, 2), RegistryEntries.BLOCK_STRUCTURED_CRAFTER.value()
+                .defaultBlockState()
+                .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
+
+        ItemStack patternBanner = new ItemStack(Items.WHITE_BANNER);
+        patternBanner.set(DataComponents.BANNER_PATTERNS, new BannerPatternLayers.Builder()
+                .add(helper.getLevel().registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.FLOWER).get(), DyeColor.YELLOW)
+                .build());
+
+        // Define inputs
+        setChestWithItem(helper, POS.offset(3, 3, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(2, 3, 3), patternBanner.copy());
+        setChestWithItem(helper, POS.offset(1, 3, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(3, 2, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(2, 2, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(1, 2, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(3, 1, 3), ItemStack.EMPTY);
+        setChestWithItem(helper, POS.offset(2, 1, 3), new ItemStack(Items.WHITE_BANNER));
+        setChestWithItem(helper, POS.offset(1, 1, 3), ItemStack.EMPTY);
+
+        // Set output chest
+        helper.setBlock(POS.offset(2, 2, 1), Blocks.CHEST);
+
+        // Activate crafter
+        helper.setBlock(POS.offset(1, 2, 2), Blocks.REDSTONE_BLOCK);
+
+        helper.succeedWhen(() -> {
+            // Result
+            assertChestContains(helper, POS.offset(2, 2, 1), patternBanner);
+
+            // Inputs must be consumed
+            assertChestEmpty(helper, POS.offset(3, 3, 3));
+            assertChestContains(helper, POS.offset(2, 3, 3), patternBanner);
+            assertChestEmpty(helper, POS.offset(1, 3, 3));
+            assertChestEmpty(helper, POS.offset(3, 2, 3));
+            assertChestEmpty(helper, POS.offset(2, 2, 3));
+            assertChestEmpty(helper, POS.offset(1, 2, 3));
+            assertChestEmpty(helper, POS.offset(3, 1, 3));
+            assertChestEmpty(helper, POS.offset(2, 1, 3));
+            assertChestEmpty(helper, POS.offset(1, 1, 3));
+        });
+    }
+
     protected void setChestWithItem(GameTestHelper helper, BlockPos pos, ItemStack itemStack) {
         helper.setBlock(pos, Blocks.CHEST);
         ChestBlockEntity chest = helper.getBlockEntity(pos);

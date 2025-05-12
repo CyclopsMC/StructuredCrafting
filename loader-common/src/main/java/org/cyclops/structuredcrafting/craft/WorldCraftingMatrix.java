@@ -223,7 +223,7 @@ public class WorldCraftingMatrix {
                     int i = r * 3 + c;
 
                     ItemStack originalStack = inventoryCrafting.getItem(i);
-                    ItemStack remainingStack = r >= top && r - top < craftInput.height() && c >= left && c - left < craftInput.width() ? remainingStacks.get((r - top) * craftInput.height() + c - left) : ItemStack.EMPTY;
+                    ItemStack remainingStack = r >= top && r - top < craftInput.height() && c >= left && c - left < craftInput.width() ? remainingStacks.get((r - top) * craftInput.width() + c - left) : ItemStack.EMPTY;
                     if(originalStack != null && !originalStack.isEmpty()) {
                         if (providers[i] != null) {
                             // Consume one item from input
