@@ -77,7 +77,7 @@ public class InventoryItemStackProviderFabric implements IItemStackProvider {
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos, side);
         if (storage != null) {
             try (Transaction tx = Transaction.openOuter()) {
-                long inserted = storage.insert(ItemVariant.of(itemStack), 1, tx);
+                long inserted = storage.insert(ItemVariant.of(itemStack), itemStack.getCount(), tx);
                 if (simulate) {
                     tx.abort();
                 } else {

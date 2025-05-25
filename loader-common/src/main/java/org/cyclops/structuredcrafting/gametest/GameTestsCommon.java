@@ -195,7 +195,7 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             // Result
-            assertChestContains(helper, POS.offset(2, 2, 1), new ItemStack(Blocks.OAK_STAIRS));
+            assertChestContains(helper, POS.offset(2, 2, 1), new ItemStack(Blocks.OAK_STAIRS, 4));
 
             // Inputs must be consumed
             helper.assertBlockNotPresent(Blocks.OAK_PLANKS, POS.offset(3, 1, 3));
@@ -229,7 +229,7 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             // Result
-            assertChestContains(helper, POS.offset(2, 2, 1), new ItemStack(Blocks.OAK_STAIRS));
+            assertChestContains(helper, POS.offset(2, 2, 1), new ItemStack(Blocks.OAK_STAIRS, 4));
 
             // Inputs must be consumed
             assertChestEmpty(helper, POS.offset(3, 1, 3));
@@ -562,7 +562,7 @@ public class GameTestsCommon {
     }
 
     protected void assertChestContains(GameTestHelper helper, BlockPos pos, ItemStack itemStack) {
-        helper.assertBlockEntityData(pos, (ChestBlockEntity chest) -> ItemStack.isSameItemSameComponents(chest.getItem(0), itemStack), () -> "Chest is not empty");
+        helper.assertBlockEntityData(pos, (ChestBlockEntity chest) -> ItemStack.matches(chest.getItem(0), itemStack), () -> "Chest is not empty");
     }
 
 }
