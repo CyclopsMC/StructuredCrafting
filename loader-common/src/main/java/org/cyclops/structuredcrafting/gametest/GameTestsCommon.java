@@ -4,8 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import org.cyclops.cyclopscore.gametest.GameTest;
 import org.cyclops.structuredcrafting.Reference;
 import org.cyclops.structuredcrafting.RegistryEntries;
 import org.cyclops.structuredcrafting.block.BlockStructuredCrafter;
@@ -553,16 +555,16 @@ public class GameTestsCommon {
 
     protected void setChestWithItem(GameTestHelper helper, BlockPos pos, ItemStack itemStack) {
         helper.setBlock(pos, Blocks.CHEST);
-        ChestBlockEntity chest = helper.getBlockEntity(pos);
+        ChestBlockEntity chest = helper.getBlockEntity(pos, ChestBlockEntity.class);
         chest.setItem(0, itemStack);
     }
 
     protected void assertChestEmpty(GameTestHelper helper, BlockPos pos) {
-        helper.assertBlockEntityData(pos, (ChestBlockEntity chest) -> chest.isEmpty(), () -> "Chest is not empty");
+        helper.assertBlockEntityData(pos, ChestBlockEntity.class, RandomizableContainerBlockEntity::isEmpty, () -> Component.literal("Chest is not empty"));
     }
 
     protected void assertChestContains(GameTestHelper helper, BlockPos pos, ItemStack itemStack) {
-        helper.assertBlockEntityData(pos, (ChestBlockEntity chest) -> ItemStack.matches(chest.getItem(0), itemStack), () -> "Chest is not empty");
+        helper.assertBlockEntityData(pos, ChestBlockEntity.class, (ChestBlockEntity chest) -> ItemStack.matches(chest.getItem(0), itemStack), () -> Component.literal("Chest is not empty"));
     }
 
 }

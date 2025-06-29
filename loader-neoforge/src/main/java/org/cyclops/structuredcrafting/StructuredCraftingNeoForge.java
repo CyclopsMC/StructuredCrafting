@@ -17,6 +17,7 @@ import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.InventoryItemStackProviderNeoForge;
 import org.cyclops.structuredcrafting.craft.provider.ItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.WorldItemStackProviderNeoForge;
+import org.cyclops.structuredcrafting.gametest.GameTestsCommon;
 import org.cyclops.structuredcrafting.modcompat.capabilities.WorkerStructuredCrafterTileCompat;
 
 /**
@@ -82,6 +83,11 @@ public class StructuredCraftingNeoForge extends ModBaseNeoForge<StructuredCrafti
 
         configHandler.addConfigurable(new BlockStructuredCrafterConfig<>(this));
         configHandler.addConfigurable(new BlockEntityStructuredCrafterConfig<>(this));
+    }
+
+    @Override
+    public Class<?>[] getGameTestClasses() {
+        return new Class[]{ GameTestsCommon.class };
     }
 
     /**

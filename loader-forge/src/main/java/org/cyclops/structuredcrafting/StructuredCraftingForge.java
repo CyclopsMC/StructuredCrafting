@@ -15,6 +15,7 @@ import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.InventoryItemStackProviderForge;
 import org.cyclops.structuredcrafting.craft.provider.ItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.WorldItemStackProviderForge;
+import org.cyclops.structuredcrafting.gametest.GameTestsCommon;
 import org.cyclops.structuredcrafting.proxy.ClientProxyForge;
 import org.cyclops.structuredcrafting.proxy.CommonProxyForge;
 
@@ -78,5 +79,10 @@ public class StructuredCraftingForge extends ModBaseForge<StructuredCraftingForg
 
         configHandler.addConfigurable(new BlockStructuredCrafterConfig<>(this));
         configHandler.addConfigurable(new BlockEntityStructuredCrafterConfig<>(this));
+    }
+
+    @Override
+    public Class<?>[] getGameTestClasses() {
+        return new Class[]{ GameTestsCommon.class };
     }
 }

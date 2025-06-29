@@ -13,6 +13,7 @@ import org.cyclops.structuredcrafting.craft.provider.IItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.InventoryItemStackProviderFabric;
 import org.cyclops.structuredcrafting.craft.provider.ItemStackProviderRegistry;
 import org.cyclops.structuredcrafting.craft.provider.WorldItemStackProviderFabric;
+import org.cyclops.structuredcrafting.gametest.GameTestsCommon;
 import org.cyclops.structuredcrafting.proxy.ClientProxyFabric;
 import org.cyclops.structuredcrafting.proxy.CommonProxyFabric;
 
@@ -74,5 +75,10 @@ public class StructuredCraftingFabric extends ModBaseFabric<StructuredCraftingFa
 
         configHandler.addConfigurable(new BlockStructuredCrafterConfig<>(this));
         configHandler.addConfigurable(new BlockEntityStructuredCrafterConfig<>(this));
+    }
+
+    @Override
+    public Class<?>[] getGameTestClasses() {
+        return new Class[]{ GameTestsCommon.class };
     }
 }
