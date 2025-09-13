@@ -44,7 +44,9 @@ public class StructuredCraftingNeoForge extends ModBaseVersionable<StructuredCra
         super.loadModCompats(modCompatLoader);
 
         // Capabilities
-        getCapabilityConstructorRegistry().registerBlockEntity(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER::value, new WorkerStructuredCrafterTileCompat());
+        if (getModHelpers().getMinecraftHelpers().isModLoaded("commoncapabilities")) {
+            getCapabilityConstructorRegistry().registerBlockEntity(RegistryEntries.BLOCK_ENTITY_STRUCTURED_CRAFTER::value, new WorkerStructuredCrafterTileCompat());
+        }
     }
 
     @Override
