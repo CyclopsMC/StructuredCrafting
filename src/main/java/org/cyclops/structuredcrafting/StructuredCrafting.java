@@ -1,6 +1,7 @@
 package org.cyclops.structuredcrafting;
 
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.Level;
@@ -41,7 +42,9 @@ public class StructuredCrafting extends ModBaseVersionable<StructuredCrafting> {
         super.loadModCompats(modCompatLoader);
 
         // Capabilities
-        getCapabilityConstructorRegistry().registerTile(BlockEntityStructuredCrafter.class, new WorkerStructuredCrafterTileCompat());
+        if (ModList.get().isLoaded("commoncapabilities")) {
+            getCapabilityConstructorRegistry().registerTile(BlockEntityStructuredCrafter.class, new WorkerStructuredCrafterTileCompat());
+        }
     }
 
     @Override
