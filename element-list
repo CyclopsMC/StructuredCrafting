@@ -3,4 +3,5 @@ org.cyclops.structuredcrafting.block
 org.cyclops.structuredcrafting.blockentity
 org.cyclops.structuredcrafting.craft
 org.cyclops.structuredcrafting.craft.provider
+org.cyclops.structuredcrafting.gametest
 org.cyclops.structuredcrafting.modcompat.capabilities
