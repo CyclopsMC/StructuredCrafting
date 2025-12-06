@@ -564,7 +564,7 @@ public class GameTestsCommon {
     }
 
     protected void assertChestContains(GameTestHelper helper, BlockPos pos, ItemStack itemStack) {
-        helper.assertBlockEntityData(pos, ChestBlockEntity.class, (ChestBlockEntity chest) -> ItemStack.matches(chest.getItem(0), itemStack), () -> Component.literal("Chest is not empty"));
+        helper.assertBlockEntityData(pos, ChestBlockEntity.class, (ChestBlockEntity chest) -> ItemStack.matches(chest.getItem(0), itemStack), () -> Component.literal("Chest does not contain: " + itemStack));
     }
 
 }

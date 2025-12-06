@@ -36,10 +36,12 @@ dependencies {
     }
 }
 
-runs {
-    configureEach {
-        modSource project.sourceSets.main
-        modSource project.sourceSets.api
+neoForge {
+    addModdingDependenciesTo sourceSets.api
+    mods {
+        structuredcrafting {
+            sourceSet(sourceSets.api)
+        }
     }
 }
 

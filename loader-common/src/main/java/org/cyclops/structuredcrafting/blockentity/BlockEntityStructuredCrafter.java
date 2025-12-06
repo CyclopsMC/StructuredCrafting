@@ -50,7 +50,7 @@ public class BlockEntityStructuredCrafter extends CyclopsBlockEntity {
             super.update(level, pos, blockState, blockEntity);
 
             blockEntity.setTickOffset((blockEntity.getTickOffset() + 1) % SPEED);
-            if(!level.isClientSide && blockEntity.getTickOffset() == 0) {
+            if(!level.isClientSide() && blockEntity.getTickOffset() == 0) {
                 if(level.hasNeighborSignal(pos)) {
                     blockEntity.getMatrix().craft(false);
                 } else {

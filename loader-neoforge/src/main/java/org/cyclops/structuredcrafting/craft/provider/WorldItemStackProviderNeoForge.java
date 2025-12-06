@@ -8,7 +8,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.cyclops.cyclopscore.helper.IModHelpersNeoForge;
 
 import java.util.Map;
@@ -33,11 +34,11 @@ public class WorldItemStackProviderNeoForge extends WorldItemStackProviderBase {
 
     @Override
     protected boolean hasEmptyItemHandler(Level world, BlockPos pos, Direction side) {
-        IItemHandler itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.ItemHandler.BLOCK).orElse(null);
+        ResourceHandler<ItemResource> itemHandler = IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(world, pos, side, Capabilities.Item.BLOCK).orElse(null);
         boolean emptyItemHandler = true;
         if (itemHandler != null) {
-            for (int i = 0; i < itemHandler.getSlots(); i++) {
-                if (!itemHandler.extractItem(i, 1, true).isEmpty()) {
+            for (int i = 0; i < itemHandler.size(); i++) {
+                if (!itemHandler.getResource(i).isEmpty()) {
                     emptyItemHandler = false;
                     break;
                 }
