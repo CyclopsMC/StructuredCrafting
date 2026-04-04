@@ -1,0 +1,13 @@
+{
+  "minVersion": "0.8.5",
+  "required": true,
+  "compatibilityLevel": "JAVA_17",
+  "package": "org.cyclops.structuredcrafting.mixin",
+  "mixins": [],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "setSourceFile": true
+}
+
