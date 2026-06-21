@@ -68,7 +68,7 @@ public class StructuredCraftingForge extends ModBaseForge<StructuredCraftingForg
     @Override
     protected CreativeModeTab.Builder constructDefaultCreativeModeTab(CreativeModeTab.Builder builder) {
         return super.constructDefaultCreativeModeTab(builder)
-                .icon(() -> new ItemStack(RegistryEntries.ITEM_STRUCTURED_CRAFTER));
+                .icon(() -> new ItemStack(RegistryEntries.ITEM_STRUCTURED_CRAFTER.getHolder()));
     }
 
     @Override

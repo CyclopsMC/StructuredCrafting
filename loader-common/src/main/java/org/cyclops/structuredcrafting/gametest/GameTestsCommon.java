@@ -289,13 +289,13 @@ public class GameTestsCommon {
                 .defaultBlockState()
                 .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
 
-        ItemStack patternBanner = new ItemStack(Items.WHITE_BANNER);
+        ItemStack patternBanner = new ItemStack(Items.BANNER.white());
         patternBanner.set(DataComponents.BANNER_PATTERNS, new BannerPatternLayers.Builder()
                 .add(helper.getLevel().registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.FLOWER).get(), DyeColor.YELLOW)
                 .build());
 
         // Define inputs
-        setChestWithItem(helper, POS.offset(3, 3, 3), new ItemStack(Items.WHITE_BANNER));
+        setChestWithItem(helper, POS.offset(3, 3, 3), new ItemStack(Items.BANNER.white()));
         setChestWithItem(helper, POS.offset(2, 3, 3), patternBanner.copy());
         setChestWithItem(helper, POS.offset(1, 3, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(3, 2, 3), ItemStack.EMPTY);
@@ -334,7 +334,7 @@ public class GameTestsCommon {
                 .defaultBlockState()
                 .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
 
-        ItemStack patternBanner = new ItemStack(Items.WHITE_BANNER);
+        ItemStack patternBanner = new ItemStack(Items.BANNER.white());
         patternBanner.set(DataComponents.BANNER_PATTERNS, new BannerPatternLayers.Builder()
                 .add(helper.getLevel().registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.FLOWER).get(), DyeColor.YELLOW)
                 .build());
@@ -343,7 +343,7 @@ public class GameTestsCommon {
         setChestWithItem(helper, POS.offset(3, 3, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(2, 3, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(1, 3, 3), ItemStack.EMPTY);
-        setChestWithItem(helper, POS.offset(3, 2, 3), new ItemStack(Items.WHITE_BANNER));
+        setChestWithItem(helper, POS.offset(3, 2, 3), new ItemStack(Items.BANNER.white()));
         setChestWithItem(helper, POS.offset(2, 2, 3), patternBanner.copy());
         setChestWithItem(helper, POS.offset(1, 2, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(3, 1, 3), ItemStack.EMPTY);
@@ -379,7 +379,7 @@ public class GameTestsCommon {
                 .defaultBlockState()
                 .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
 
-        ItemStack patternBanner = new ItemStack(Items.WHITE_BANNER);
+        ItemStack patternBanner = new ItemStack(Items.BANNER.white());
         patternBanner.set(DataComponents.BANNER_PATTERNS, new BannerPatternLayers.Builder()
                 .add(helper.getLevel().registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.FLOWER).get(), DyeColor.YELLOW)
                 .build());
@@ -391,7 +391,7 @@ public class GameTestsCommon {
         setChestWithItem(helper, POS.offset(3, 2, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(2, 2, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(1, 2, 3), ItemStack.EMPTY);
-        setChestWithItem(helper, POS.offset(3, 1, 3), new ItemStack(Items.WHITE_BANNER));
+        setChestWithItem(helper, POS.offset(3, 1, 3), new ItemStack(Items.BANNER.white()));
         setChestWithItem(helper, POS.offset(2, 1, 3), patternBanner.copy());
         setChestWithItem(helper, POS.offset(1, 1, 3), ItemStack.EMPTY);
 
@@ -424,7 +424,7 @@ public class GameTestsCommon {
                 .defaultBlockState()
                 .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
 
-        ItemStack patternBanner = new ItemStack(Items.WHITE_BANNER);
+        ItemStack patternBanner = new ItemStack(Items.BANNER.white());
         patternBanner.set(DataComponents.BANNER_PATTERNS, new BannerPatternLayers.Builder()
                 .add(helper.getLevel().registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.FLOWER).get(), DyeColor.YELLOW)
                 .build());
@@ -437,7 +437,7 @@ public class GameTestsCommon {
         setChestWithItem(helper, POS.offset(2, 2, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(1, 2, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(3, 1, 3), ItemStack.EMPTY);
-        setChestWithItem(helper, POS.offset(2, 1, 3), new ItemStack(Items.WHITE_BANNER));
+        setChestWithItem(helper, POS.offset(2, 1, 3), new ItemStack(Items.BANNER.white()));
         setChestWithItem(helper, POS.offset(1, 1, 3), patternBanner.copy());
 
         // Set output chest
@@ -469,14 +469,14 @@ public class GameTestsCommon {
                 .defaultBlockState()
                 .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
 
-        ItemStack patternBanner = new ItemStack(Items.WHITE_BANNER);
+        ItemStack patternBanner = new ItemStack(Items.BANNER.white());
         patternBanner.set(DataComponents.BANNER_PATTERNS, new BannerPatternLayers.Builder()
                 .add(helper.getLevel().registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.FLOWER).get(), DyeColor.YELLOW)
                 .build());
 
         // Define inputs
         setChestWithItem(helper, POS.offset(3, 3, 3), ItemStack.EMPTY);
-        setChestWithItem(helper, POS.offset(2, 3, 3), new ItemStack(Items.WHITE_BANNER));
+        setChestWithItem(helper, POS.offset(2, 3, 3), new ItemStack(Items.BANNER.white()));
         setChestWithItem(helper, POS.offset(1, 3, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(3, 2, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(2, 2, 3), ItemStack.EMPTY);
@@ -514,7 +514,7 @@ public class GameTestsCommon {
                 .defaultBlockState()
                 .setValue(BlockStructuredCrafter.FACING, Direction.NORTH));
 
-        ItemStack patternBanner = new ItemStack(Items.WHITE_BANNER);
+        ItemStack patternBanner = new ItemStack(Items.BANNER.white());
         patternBanner.set(DataComponents.BANNER_PATTERNS, new BannerPatternLayers.Builder()
                 .add(helper.getLevel().registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.FLOWER).get(), DyeColor.YELLOW)
                 .build());
@@ -527,7 +527,7 @@ public class GameTestsCommon {
         setChestWithItem(helper, POS.offset(2, 2, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(1, 2, 3), ItemStack.EMPTY);
         setChestWithItem(helper, POS.offset(3, 1, 3), ItemStack.EMPTY);
-        setChestWithItem(helper, POS.offset(2, 1, 3), new ItemStack(Items.WHITE_BANNER));
+        setChestWithItem(helper, POS.offset(2, 1, 3), new ItemStack(Items.BANNER.white()));
         setChestWithItem(helper, POS.offset(1, 1, 3), ItemStack.EMPTY);
 
         // Set output chest
