@@ -12,8 +12,9 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.cyclops.cyclopscore.helper.IModHelpersNeoForge;
 
+import com.google.common.collect.MapMaker;
+
 import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * World that can provide an itemstack.
@@ -21,7 +22,9 @@ import java.util.WeakHashMap;
  */
 public class WorldItemStackProviderNeoForge extends WorldItemStackProviderBase {
 
-    private static final Map<ServerLevel, FakePlayer> FAKE_PLAYERS = new WeakHashMap<ServerLevel, FakePlayer>();
+    // Weak keys AND values: the FakePlayer value holds a reference to its ServerLevel key,
+    // so a WeakHashMap (weak keys only) would keep the key alive forever and leak.
+    private static final Map<ServerLevel, FakePlayer> FAKE_PLAYERS = new MapMaker().weakKeys().weakValues().makeMap();
 
     public static FakePlayer getFakePlayer(ServerLevel world) {
         FakePlayer fakePlayer = FAKE_PLAYERS.get(world);
