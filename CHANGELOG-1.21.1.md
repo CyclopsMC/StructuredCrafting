@@ -1,8 +1,15 @@
 # Changelog for Minecraft 1.21.1
 All notable changes to this project will be documented in this file.
 
+<a name="1.21.1-0.2.14"></a>
+## [1.21.1-0.2.14](https://github.com/CyclopsMC/StructuredCrafting/compare/1.21.1-0.2.13...1.21.1-0.2.14) - 2026-08-24 21:02:36
+
+
+### Fixed
+* Fix memory leak in per-level FakePlayer cache
+
 <a name="1.21.1-0.2.13"></a>
-## [1.21.1-0.2.13](https://github.com/CyclopsMC/StructuredCrafting/compare/1.21.1-0.2.12...1.21.1-0.2.13) - 2025-09-13 13:42:12
+## [1.21.1-0.2.13](https://github.com/CyclopsMC/StructuredCrafting/compare/1.21.1-0.2.12...1.21.1-0.2.13) - 2025-09-13 13:42:12 +0200
 
 
 ### Fixed
