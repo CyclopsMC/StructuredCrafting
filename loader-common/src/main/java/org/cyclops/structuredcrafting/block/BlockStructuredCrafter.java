@@ -1,6 +1,5 @@
 package org.cyclops.structuredcrafting.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -15,7 +14,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -33,7 +31,6 @@ import javax.annotation.Nullable;
  */
 public class BlockStructuredCrafter extends BlockWithEntity {
 
-    public static final MapCodec<BlockStructuredCrafter> CODEC = BlockBehaviour.simpleCodec(BlockStructuredCrafter::new);
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
@@ -44,10 +41,6 @@ public class BlockStructuredCrafter extends BlockWithEntity {
                 .setValue(FACING, Direction.DOWN));
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 
     @Override
     @Nullable
